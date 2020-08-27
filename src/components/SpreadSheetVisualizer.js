@@ -9,16 +9,16 @@ class SpreadSheetVisualizer extends React.Component {
         <table className="table-striped">
           <thead>
             <tr>
-              {header.map((e) => (
-                <th>{e}</th>
+              {header.map((e, i) => (
+                <th key={i}>{e}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <tr>
-                {row.map((e) => (
-                  <td>{e}</td>
+            {rows.map((row, i) => (
+              <tr key={i}>
+                {row.map((e, j) => (
+                  <td key={i * header.length + j}>{e}</td>
                 ))}
               </tr>
             ))}
