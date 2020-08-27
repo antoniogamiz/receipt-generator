@@ -3,6 +3,7 @@ import React from "react";
 import NavBar from "./NavBar";
 import SpreadSheetVisualizer from "./SpreadSheetVisualizer";
 import ReceiptItemListVisualizer from "./ReceiptItemListVisualizer";
+import ClientData from "./ClientData";
 
 class ReceiptPage extends React.Component {
   constructor(props) {
@@ -102,6 +103,7 @@ class ReceiptPage extends React.Component {
               biUpdate={this.onUpdateItemBI}
               onDelete={this.deleteItem}
             />
+            <ClientData />
           </div>
         </div>
       </div>
