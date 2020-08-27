@@ -16,7 +16,7 @@ class SpreadSheetVisualizer extends React.Component {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={i}>
+              <tr key={i} onDoubleClick={() => this.props.addItem(row[0])}>
                 {row.map((e, j) => (
                   <td key={i * header.length + j}>{e}</td>
                 ))}

@@ -6,6 +6,11 @@
   margin: 10px;
 }
 
+#total_table {
+  border: 1px solid black;
+  margin: 10px;
+}
+
 /* Navbar */
 
 div.pane-sm {
@@ -43,29 +48,12 @@ td input {
 }
 
 /* ------------ */
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  gap: 1px 1px;
-  grid-template-areas: "client_data client_data iva" "client_data client_data iva" "client_data client_data iva" "client_data client_data iva";
-}
 
-.client_data {
+.grid-container-client-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   gap: 1px 1px;
-  grid-template-areas: ". ." ". ." ". ." ". .";
-  grid-area: client_data;
-  margin: 10px;
-}
-
-.iva {
-  grid-area: iva;
-  margin-left: 20px;
-  width: 85%;
-  border: 1px solid black;
 }
 
 /* ------------ */
