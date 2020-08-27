@@ -1,7 +1,20 @@
 import React from "react";
 
-function App() {
-  return <h1>Our Electron App</h1>;
+import Footer from "./components/Footer";
+import Title from "./components/Title";
+
+import ReceiptPage from "./components/ReceiptPage";
+
+class App extends React.Component {
+  render() {
+    return (
+      <div class="window">
+        <Title />
+        <ReceiptPage />
+        <Footer />
+      </div>
+    );
+  }
 }
 
 export default App;

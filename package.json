@@ -29,7 +29,8 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "electron": "cross-env NODE_ENV=dev nodemon --exec \"\"electron .\"\"",
+    "electron": "electron .",
+    "electron1": "cross-env NODE_ENV=dev nodemon --exec \"\"electron .\"\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
