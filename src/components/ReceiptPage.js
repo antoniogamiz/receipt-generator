@@ -1,4 +1,5 @@
 import React from "react";
+import XLSX from "../utils/xlsx";
 
 import NavBar from "./NavBar";
 import SpreadSheetVisualizer from "./SpreadSheetVisualizer";
@@ -10,7 +11,7 @@ class ReceiptPage extends React.Component {
     super(props);
     this.state = {
       pageIndex: 0,
-      xlsx: props.xlsx,
+      xlsx: new XLSX(),
       items: [],
     };
 
@@ -19,6 +20,10 @@ class ReceiptPage extends React.Component {
     this.onUpdateItemAmount = this.onUpdateItemAmount.bind(this);
     this.onUpdateItemBI = this.onUpdateItemBI.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+  }
+
+  componentDidMount() {
+    this.state.xlsx.load().then(() => this.setState({}));
   }
 
   changeSpreadSheet(index) {
