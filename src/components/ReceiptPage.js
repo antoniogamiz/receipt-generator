@@ -5,14 +5,15 @@ import SpreadSheetVisualizer from "./SpreadSheetVisualizer";
 
 class ReceiptPage extends React.Component {
   render() {
+    let sheetData = this.props.xlsx.pages ? this.props.xlsx.pages[0] : [];
     return (
-      <div class="window-content">
-        <div class="pane-group">
-          <div class="pane pane-sm sidebar">
+      <div className="window-content">
+        <div className="pane-group">
+          <div className="pane pane-sm sidebar">
             <NavBar />
           </div>
-          <div class="pane">
-            <SpreadSheetVisualizer />
+          <div className="pane">
+            <SpreadSheetVisualizer sheet={sheetData} />
           </div>
         </div>
       </div>

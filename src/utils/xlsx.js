@@ -1,6 +1,6 @@
-const xlsxFile = require("read-excel-file/node");
+const xlsxFile = window.require("read-excel-file/node");
 
-const DEFAULT_PATH = "./data/test.xlsx";
+const DEFAULT_PATH = "data/test.xlsx";
 
 class XLSX {
   path;
@@ -39,14 +39,6 @@ class XLSX {
 
   get sheetNames() {
     return this.pagesName;
-  }
-
-  get path() {
-    return this.path;
-  }
-
-  set path(p) {
-    this.path = p;
   }
 }
 

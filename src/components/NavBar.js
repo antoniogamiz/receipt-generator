@@ -3,8 +3,8 @@ import React from "react";
 class App extends React.Component {
   render() {
     return (
-      <div class="pane pane-sm sidebar">
-        <nav class="nav-group" id="navbar"></nav>
+      <div className="pane pane-sm sidebar">
+        <nav className="nav-group" id="navbar"></nav>
       </div>
     );
   }
