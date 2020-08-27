@@ -30,7 +30,7 @@ class ReceiptItemListVisualizer extends React.Component {
             </thead>
             <tbody>
               {rows.map((item, i) => (
-                <tr key={i}>
+                <tr onDoubleClick={() => this.props.onDelete(item.ref)} key={i}>
                   <td> {i} </td>
                   <td> {item.brand} </td>
                   <td> {item.model} </td>

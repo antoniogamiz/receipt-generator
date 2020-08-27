@@ -17,6 +17,7 @@ class ReceiptPage extends React.Component {
     this.addItemToReceipt = this.addItemToReceipt.bind(this);
     this.onUpdateItemAmount = this.onUpdateItemAmount.bind(this);
     this.onUpdateItemBI = this.onUpdateItemBI.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
   }
 
   changeSpreadSheet(index) {
@@ -38,7 +39,9 @@ class ReceiptPage extends React.Component {
       pvp: 0,
       total: 0,
     };
-    this.setState((p) => ({ items: [...p.items, newItem] }));
+    this.setState({ items: [...this.state.items, newItem] }, () =>
+      this.updateItem(ref, { amount: 1, bi: 0 })
+    );
   }
 
   updateItem(ref, { amount, bi }) {
@@ -72,6 +75,11 @@ class ReceiptPage extends React.Component {
     this.updateItem(ref, { bi: newBI });
   }
 
+  deleteItem(ref) {
+    let newItemList = this.state.items.find((item) => ref !== item.ref);
+    this.setState({ items: newItemList || [] });
+  }
+
   render() {
     let sheetData = this.state.xlsx.pages
       ? this.state.xlsx.pages[this.state.pageIndex]
@@ -92,6 +100,7 @@ class ReceiptPage extends React.Component {
               items={this.state.items}
               amountUpdate={this.onUpdateItemAmount}
               biUpdate={this.onUpdateItemBI}
+              onDelete={this.deleteItem}
             />
           </div>
         </div>
