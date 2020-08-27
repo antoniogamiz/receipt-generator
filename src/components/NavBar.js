@@ -6,7 +6,12 @@ class NavBar extends React.Component {
       <div className="pane pane-sm sidebar">
         <nav className="nav-group" id="navbar">
           {this.props.names.map((name, i) => (
-            <span key={i} className="nav-group-item" id="navbar_sheet_element">
+            <span
+              key={i}
+              className="nav-group-item"
+              id="navbar_sheet_element"
+              onClick={() => this.props.onclick(i)}
+            >
               <span className="icon icon-database"></span>
               {name}
             </span>
