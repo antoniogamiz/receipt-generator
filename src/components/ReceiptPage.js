@@ -129,7 +129,7 @@ class ReceiptPage extends React.Component {
   }
 
   deleteItem(ref) {
-    let newItemList = this.state.items.find((item) => ref !== item.ref);
+    let newItemList = this.state.items.filter((item) => ref !== item.ref);
     this.setState({ items: newItemList || [] });
   }
 
