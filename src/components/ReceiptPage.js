@@ -12,7 +12,7 @@ class ReceiptPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageIndex: 0,
+      page: [],
       xlsx: new XLSX(),
       items: [],
       pdfFiles: [],
@@ -36,10 +36,18 @@ class ReceiptPage extends React.Component {
     this.updateFile = this.updateFile.bind(this);
     this.updatePDFFiles = this.updatePDFFiles.bind(this);
     this.updateClientData = this.updateClientData.bind(this);
+    this.updateSearchResults = this.updateSearchResults.bind(this);
   }
 
   componentDidMount() {
     this.state.xlsx.load().then(() => this.setState({}));
+  }
+
+  updateSearchResults(e) {
+    let ref = e.target.value;
+    this.setState({
+      page: this.state.xlsx.searchByReference(ref),
+    });
   }
 
   updateClientData(e, field) {
@@ -65,7 +73,8 @@ class ReceiptPage extends React.Component {
   }
 
   changeSpreadSheet(index) {
-    this.setState({ pageIndex: index });
+    let newPage = this.state.xlsx.pages ? this.state.xlsx.pages[index] : [];
+    this.setState({ page: newPage });
   }
 
   addItemToReceipt(ref) {
@@ -125,9 +134,7 @@ class ReceiptPage extends React.Component {
   }
 
   render() {
-    let sheetData = this.state.xlsx.pages
-      ? this.state.xlsx.pages[this.state.pageIndex]
-      : [];
+    let sheetData = this.state.page || [];
     let names = this.state.xlsx.sheetNames || [];
     let nameFiles = this.state.pdfFiles.map((f) => f.replace(/^.*[\\\/]/, ""));
     return (
@@ -137,7 +144,10 @@ class ReceiptPage extends React.Component {
             <NavBar names={names} onclick={this.changeSpreadSheet} />
           </div>
           <div className="pane">
-            <ToolBar updateFile={this.updateFile} />
+            <ToolBar
+              updateFile={this.updateFile}
+              updateSearch={this.updateSearchResults}
+            />
             <SpreadSheetVisualizer
               sheet={sheetData}
               addItem={this.addItemToReceipt}

@@ -8,6 +8,7 @@ class ToolBar extends React.Component {
           className="form-control"
           placeholder="Reference"
           id="search-reference"
+          onChange={this.props.updateSearch}
         />
         <div id="input_xlsx" className="form-group">
           <input
