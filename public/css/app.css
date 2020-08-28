@@ -27,12 +27,21 @@ span#navbar_sheet_element.nav-group-item {
 
 /* ------------ */
 
-#search-bar {
-  margin: 15px;
+#tool-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 50px;
+  gap: 1px 20px;
+  margin: 5px 20px;
 }
 
 #search-reference {
-  width: 150px;
+  height: 30px;
+  margin: auto;
+}
+
+#input_xlsx {
+  margin: auto;
 }
 
 /* ------------ */
@@ -55,6 +64,24 @@ td input {
   grid-template-rows: 1fr 1fr 1fr 1fr;
   gap: 1px 1px;
   margin: 20px;
+}
+
+/* ------------ */
+
+#input_pdf_container {
+  border: 1px solid black;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+}
+
+#input_pdf_container input {
+  margin: 5px 5px;
+  width: 180px;
+}
+
+#input_pdf_container p {
+  margin: 4px 0px;
 }
 
 /* ------------ */

@@ -5,6 +5,8 @@ import NavBar from "./NavBar";
 import SpreadSheetVisualizer from "./SpreadSheetVisualizer";
 import ReceiptItemListVisualizer from "./ReceiptItemListVisualizer";
 import ClientData from "./ClientData";
+import ToolBar from "./ToolBar";
+import PDFIncluder from "./PDFIncluder";
 
 class ReceiptPage extends React.Component {
   constructor(props) {
@@ -13,6 +15,17 @@ class ReceiptPage extends React.Component {
       pageIndex: 0,
       xlsx: new XLSX(),
       items: [],
+      pdfFiles: [],
+      clientData: {
+        name: "",
+        address: "",
+        cp: "0",
+        city: "",
+        nif: "",
+        installationAddress: "",
+        clientNumber: "",
+        budgetNumber: "",
+      },
     };
 
     this.changeSpreadSheet = this.changeSpreadSheet.bind(this);
@@ -20,10 +33,35 @@ class ReceiptPage extends React.Component {
     this.onUpdateItemAmount = this.onUpdateItemAmount.bind(this);
     this.onUpdateItemBI = this.onUpdateItemBI.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.updateFile = this.updateFile.bind(this);
+    this.updatePDFFiles = this.updatePDFFiles.bind(this);
+    this.updateClientData = this.updateClientData.bind(this);
   }
 
   componentDidMount() {
     this.state.xlsx.load().then(() => this.setState({}));
+  }
+
+  updateClientData(e, field) {
+    let old = this.state.clientData;
+    let newClientData = {
+      ...old,
+      [field]: e.target.value,
+    };
+    this.setState({ clientData: newClientData });
+  }
+
+  updateFile(e) {
+    let path = e.target.files[0].path;
+    let xlsx = new XLSX(path);
+    xlsx.load().then(() => {
+      this.setState({ xlsx: xlsx });
+    });
+  }
+
+  updatePDFFiles(e) {
+    let paths = Array.from(e.target.files).map((f) => f.path);
+    this.setState({ pdfFiles: paths });
   }
 
   changeSpreadSheet(index) {
@@ -91,6 +129,7 @@ class ReceiptPage extends React.Component {
       ? this.state.xlsx.pages[this.state.pageIndex]
       : [];
     let names = this.state.xlsx.sheetNames || [];
+    let nameFiles = this.state.pdfFiles.map((f) => f.replace(/^.*[\\\/]/, ""));
     return (
       <div className="window-content">
         <div className="pane-group">
@@ -98,6 +137,7 @@ class ReceiptPage extends React.Component {
             <NavBar names={names} onclick={this.changeSpreadSheet} />
           </div>
           <div className="pane">
+            <ToolBar updateFile={this.updateFile} />
             <SpreadSheetVisualizer
               sheet={sheetData}
               addItem={this.addItemToReceipt}
@@ -108,7 +148,8 @@ class ReceiptPage extends React.Component {
               biUpdate={this.onUpdateItemBI}
               onDelete={this.deleteItem}
             />
-            <ClientData />
+            <ClientData updateData={this.updateClientData} />
+            <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
           </div>
         </div>
       </div>

@@ -3,9 +3,13 @@ import React from "react";
 class InputField extends React.Component {
   render() {
     return (
-      <div class="form-group">
+      <div className="form-group">
         <label>{this.props.title}</label>
-        <input class="form-control" placeholder={this.props.title} />
+        <input
+          className="form-control"
+          onChange={this.props.update}
+          placeholder={this.props.title}
+        />
       </div>
     );
   }
