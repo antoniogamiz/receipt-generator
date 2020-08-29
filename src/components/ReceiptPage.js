@@ -1,68 +1,46 @@
-import React from "react";
-import XLSX from "../utils/xlsx";
+import React, { useState } from "react";
 
-import NavBar from "./NavBar";
-import ClientData from "./ClientData";
+import ClientData from "../receipt/ClientData";
 import PDFIncluder from "./PDFIncluder";
 import LatexGenerator from "./LatexGenerator";
 import Receipt from "../receipt/Receipt";
 
-class ReceiptPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pdfFiles: [],
-      clientData: {
-        name: "",
-        address: "",
-        cp: "0",
-        city: "",
-        nif: "",
-        installationAddress: "",
-        clientNumber: "",
-        budgetNumber: "",
-      },
-      mainTexFile: "",
-    };
+const ReceiptPage = (props) => {
+  const [clientData, setClientData] = useState({
+    name: { label: "Nombre", value: "" },
+    address: { label: "Dirección", value: "" },
+    cp: { label: "CP", value: "" },
+    city: { label: "Ciudad", value: "" },
+    nif: { label: "nif", value: "" },
+    installationAddress: { label: "Emplazamiento Instalación", value: "" },
+    clientNumber: { label: "Nº Cliente", value: "" },
+    budgetNumber: { label: "Nº Presupuesto", value: "" },
+  });
+  const [pdfFiles, setPdfFiles] = useState([]);
+  const [texFile, setTexFile] = useState("main.tex");
 
-    this.updatePDFFiles = this.updatePDFFiles.bind(this);
-    this.updateClientData = this.updateClientData.bind(this);
-    this.updateTexFile = this.updateTexFile.bind(this);
-  }
+  // updateTexFile(e) {
+  //   this.setState({ mainTexFile: e.target.files[0].path });
+  // }
 
-  updateTexFile(e) {
-    this.setState({ mainTexFile: e.target.files[0].path });
-  }
+  // updatePDFFiles(e) {
+  //   let paths = Array.from(e.target.files).map((f) => f.path);
+  //   this.setState({ pdfFiles: paths });
+  // }
 
-  updateClientData(e, field) {
-    let old = this.state.clientData;
-    let newClientData = {
-      ...old,
-      [field]: e.target.value,
-    };
-    this.setState({ clientData: newClientData });
-  }
-
-  updatePDFFiles(e) {
-    let paths = Array.from(e.target.files).map((f) => f.path);
-    this.setState({ pdfFiles: paths });
-  }
-
-  render() {
-    let nameFiles = this.state.pdfFiles.map((f) => f.replace(/^.*[\\\/]/, ""));
-    return (
-      <div className="window-content">
-        <div className="pane-group">
-          <div className="pane">
-            <Receipt />
-            <ClientData updateData={this.updateClientData} />
-            <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
-            <LatexGenerator updateTexFile={this.updateTexFile} />
-          </div>
+  // let nameFiles = this.state.pdfFiles.map((f) => f.replace(/^.*[\\\/]/, ""));
+  return (
+    <div className="window-content">
+      <div className="pane-group">
+        <div className="pane">
+          <Receipt />
+          <ClientData onUpdate={setClientData} fields={clientData} />
+          {/* <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
+            <LatexGenerator updateTexFile={setTexFile} /> */}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default ReceiptPage;

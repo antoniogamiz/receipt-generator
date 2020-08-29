@@ -6,6 +6,7 @@
         "marca",
         "marca modelo descripción cantidad",
         "modelo",
-        "n"
+        "n",
+        "presupuesto"
     ]
 }
