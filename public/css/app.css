@@ -85,3 +85,23 @@ td input {
 }
 
 /* ------------ */
+
+label {
+  padding: 2px;
+  background-color: #90ee90;
+  border-radius: 5px;
+}
+
+#latex_container {
+  border: 1px solid black;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+}
+#latex_container label {
+  margin: 4px;
+}
+
+#latex_container button {
+  margin: 0 10%;
+}

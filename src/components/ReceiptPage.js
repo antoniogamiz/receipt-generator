@@ -7,7 +7,7 @@ import ReceiptItemListVisualizer from "./ReceiptItemListVisualizer";
 import ClientData from "./ClientData";
 import ToolBar from "./ToolBar";
 import PDFIncluder from "./PDFIncluder";
-
+import LatexGenerator from "./LatexGenerator";
 class ReceiptPage extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +26,7 @@ class ReceiptPage extends React.Component {
         clientNumber: "",
         budgetNumber: "",
       },
+      mainTexFile: "",
     };
 
     this.changeSpreadSheet = this.changeSpreadSheet.bind(this);
@@ -37,6 +38,11 @@ class ReceiptPage extends React.Component {
     this.updatePDFFiles = this.updatePDFFiles.bind(this);
     this.updateClientData = this.updateClientData.bind(this);
     this.updateSearchResults = this.updateSearchResults.bind(this);
+    this.updateTexFile = this.updateTexFile.bind(this);
+  }
+
+  updateTexFile(e) {
+    this.setState({ mainTexFile: e.target.files[0].path });
   }
 
   componentDidMount() {
@@ -160,6 +166,7 @@ class ReceiptPage extends React.Component {
             />
             <ClientData updateData={this.updateClientData} />
             <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
+            <LatexGenerator updateTexFile={this.updateTexFile} />
           </div>
         </div>
       </div>
