@@ -23,11 +23,10 @@ const Tabs = (props) => {
   );
 };
 
-const Receipt = (props) => {
+const Receipt = ({ items, setItems }) => {
   const [xlsxFilePath, setXLSXFile] = useState("./data/test.xlsx");
   const [xlsx, setXLSX] = useState(new XLSX(xlsxFilePath));
   const [spreadData, setSpreadData] = useState([]);
-  const [items, setItems] = useState([]);
 
   useEffect(() => {
     xlsx.load().then(() => {

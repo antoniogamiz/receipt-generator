@@ -6,6 +6,7 @@ import LatexGenerator from "./LatexGenerator";
 import Receipt from "../receipt/Receipt";
 
 const ReceiptPage = (props) => {
+  const [items, setItems] = useState([]);
   const [clientData, setClientData] = useState({
     name: { label: "Nombre", value: "" },
     address: { label: "Dirección", value: "" },
@@ -33,7 +34,7 @@ const ReceiptPage = (props) => {
     <div className="window-content">
       <div className="pane-group">
         <div className="pane">
-          <Receipt />
+          <Receipt items={items} setItems={setItems} />
           <ClientData onUpdate={setClientData} fields={clientData} />
           {/* <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
             <LatexGenerator updateTexFile={setTexFile} /> */}
