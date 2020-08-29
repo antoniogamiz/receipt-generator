@@ -16,9 +16,7 @@ class ReceiptItemListVisualizer extends React.Component {
   render() {
     let header = this.header;
     let rows = this.props.items || [];
-    let subtotal = rows.reduce((x, e) => x + parseFloat(e.total), 0);
     return (
-      <>
         <div id="excel_receipt_container">
           <table className="table-striped">
             <thead>
@@ -55,27 +53,6 @@ class ReceiptItemListVisualizer extends React.Component {
             </tbody>
           </table>
         </div>
-        <div id="total_table">
-          <table className="table-striped">
-            <thead>
-              <tr>
-                <th>Subtotal</th>
-                <th>IVA (21%)</th>
-                <th>Gastos Generales</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td> {subtotal.toFixed(2)} €</td>
-                <td> {(subtotal * 0.21).toFixed(2)} €</td>
-                <td> {(subtotal * 0.13).toFixed(2)} € </td>
-                <td> {(subtotal * (1.0 + 0.21 + 0.13)).toFixed(2)} € </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </>
     );
   }
 }

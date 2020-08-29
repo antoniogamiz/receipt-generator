@@ -4,6 +4,7 @@ import XLSX from "../utils/xlsx";
 import NavBar from "./NavBar";
 import SpreadSheetVisualizer from "./SpreadSheetVisualizer";
 import ReceiptItemListVisualizer from "./ReceiptItemListVisualizer";
+import Total from "./Total";
 import ClientData from "./ClientData";
 import ToolBar from "./ToolBar";
 import PDFIncluder from "./PDFIncluder";
@@ -164,6 +165,7 @@ class ReceiptPage extends React.Component {
               biUpdate={this.onUpdateItemBI}
               onDelete={this.deleteItem}
             />
+            <Total items={this.state.items} />
             <ClientData updateData={this.updateClientData} />
             <PDFIncluder files={nameFiles} updateFile={this.updatePDFFiles} />
             <LatexGenerator updateTexFile={this.updateTexFile} />
