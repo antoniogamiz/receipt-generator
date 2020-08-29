@@ -19,7 +19,7 @@ class ReceiptItemListVisualizer extends React.Component {
     let subtotal = rows.reduce((x, e) => x + parseFloat(e.total), 0);
     return (
       <>
-        <div id="excel_worksheet_container">
+        <div id="excel_receipt_container">
           <table className="table-striped">
             <thead>
               <tr>
