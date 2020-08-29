@@ -20,16 +20,10 @@ const ReceiptPage = (props) => {
   const [pdfFiles, setPdfFiles] = useState([]);
   const [texFile, setTexFile] = useState("main.tex");
 
-  // updateTexFile(e) {
-  //   this.setState({ mainTexFile: e.target.files[0].path });
-  // }
+  const compile = () => {
+    console.log(texFile);
+  };
 
-  // updatePDFFiles(e) {
-  //   let paths = Array.from(e.target.files).map((f) => f.path);
-  //   this.setState({ pdfFiles: paths });
-  // }
-
-  // let nameFiles = this.state.pdfFiles.map((f) => f.replace(/^.*[\\\/]/, ""));
   return (
     <div className="window-content">
       <div className="pane-group">
@@ -37,7 +31,7 @@ const ReceiptPage = (props) => {
           <Receipt items={items} setItems={setItems} />
           <ClientData onUpdate={setClientData} fields={clientData} />
           <PDFIncluder files={pdfFiles} onUpdate={setPdfFiles} />
-          {/* <LatexGenerator updateTexFile={setTexFile} /> */}
+          <LatexGenerator compile={compile} updateTexFile={setTexFile} />
         </div>
       </div>
     </div>

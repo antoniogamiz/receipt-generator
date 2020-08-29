@@ -1,22 +1,23 @@
 import React from "react";
 
-class LatexGenerator extends React.Component {
-  render() {
-    return (
-      <div id="latex_container" className="form-group">
-        <label>Source</label>
-        <input
-          onChange={this.props.updateTexFile}
-          className="from-control"
-          type="file"
-          accept=".tex"
-        />
-        <label>Destination</label>
-        <input className="from-control" type="file" multiple="multiple" />
-        <button className="btn btn-positive">Generate PDF!</button>
-      </div>
-    );
-  }
-}
+const LatexGenerator = ({ updateTexFile, compile }) => {
+  const handleChange = (e) => {
+    updateTexFile(e.target.files[0].path);
+  };
+  return (
+    <div id="latex_container" className="form-group">
+      <label>Source</label>
+      <input
+        onChange={handleChange}
+        className="from-control"
+        type="file"
+        accept=".tex"
+      />
+      <button onClick={compile} className="btn btn-positive">
+        Generate PDF!
+      </button>
+    </div>
+  );
+};
 
 export default LatexGenerator;
