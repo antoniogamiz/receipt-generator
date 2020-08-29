@@ -5,7 +5,20 @@ const { promises: fs } = window.require("fs");
 const { exec } = window.require("child_process");
 const { ipcRenderer } = window.require("electron");
 
-const replaceData = (text, data) => {
+const replaceClientData = (text, data) => {
+  return text
+    .replace("!NAME!", data.clientData.name.value)
+    .replace("!ADDRESS!", data.clientData.address.value)
+    .replace("!CP!", data.clientData.cp.value)
+    .replace("!CITY!", data.clientData.city.value)
+    .replace("!NIF!", data.clientData.nif.value)
+    .replace("!PHONENUMBER!", "1234w56789")
+    .replace("!INSTALLATIONADDRESS!", data.clientData.installationAddress.value)
+    .replace("!CLIENTNUMBER!", data.clientData.clientNumber.value)
+    .replace("!BUDGETNUMBER!", data.clientData.budgetNumber.value);
+};
+
+const replaceReceiptData = (text, data) => {
   const subtotal = data.items
     .reduce((x, e) => x + parseFloat(e.total), 0)
     .toFixed(2);
@@ -18,18 +31,10 @@ const replaceData = (text, data) => {
       (item, i) =>
         `${i} & ${item.brand} & ${item.description} & ${
           item.amount
-        } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € \\\\`
+        } & ${item.pvp.toFixed(2)} & ${item.total.toFixed(2)} \\\\`
     )
     .join("\n");
   return text
-    .replace("!NAME!", data.clientData.name.value)
-    .replace("!ADDRESS!", data.clientData.address.value)
-    .replace("!CP!", data.clientData.cp.value)
-    .replace("!CITY!", data.clientData.city.value)
-    .replace("!NIF!", data.clientData.nif.value)
-    .replace("!PHONENUMBER!", "1234w56789")
-    .replace("!CLIENTNUMBER!", data.clientData.clientNumber.value)
-    .replace("!BUDGETNUMBER!", data.clientData.budgetNumber.value)
     .replace("!SUBTOTAL!", subtotal)
     .replace("!IVA!", iva)
     .replace("!GENERALEXPENSES!", generalExpenses)
@@ -44,32 +49,30 @@ const openPDF = (pdfPath) => {
 export const generatePDF = async (pathFile, data) => {
   const directory = path.dirname(pathFile);
   const filename = path.basename(pathFile);
+  const templatePath = path.format({ dir: directory, base: "Presupuesto.tex" });
 
-  // replace include in master file
   let originalMasterTex = await fs.readFile(pathFile, "utf8");
-  let newMasterFile = originalMasterTex.replace(
-    "include{Presupuesto}",
-    "include{Presupuesto2}"
-  );
-  await fs.writeFile(pathFile, newMasterFile);
+  let originalTemplateTex = await fs.readFile(templatePath, "utf8");
 
-  // replace template file
-  const templateFile = path.format({ dir: directory, base: "Presupuesto.tex" });
-  let text = await fs.readFile(templateFile, "utf8");
-  text = replaceData(text, data);
-  await fs.writeFile(
-    path.format({ dir: directory, base: "Presupuesto2.tex" }),
-    text
-  );
+  let newMasterTex = replaceClientData(originalMasterTex, data);
+  let newTemplateTex = replaceClientData(originalTemplateTex, data);
+  newTemplateTex = replaceReceiptData(newTemplateTex, data);
+
+  await fs.writeFile(pathFile, newMasterTex);
+  await fs.writeFile(templatePath, newTemplateTex);
 
   let command = `cd ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
   exec(command, (error, stdout, stderr) => {
+    fs.writeFile(pathFile, originalMasterTex);
+    fs.writeFile(templatePath, originalTemplateTex);
+
     if (error || stderr) {
       console.log(`error: ${error.message}`);
       console.log(`stderr: ${stderr}`);
+      console.log(stdout);
       return;
     }
-    fs.writeFile(pathFile, originalMasterTex);
+
     openPDF(
       path.format({
         dir: directory,
