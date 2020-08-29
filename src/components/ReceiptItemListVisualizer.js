@@ -1,60 +1,60 @@
 import React from "react";
 
-class ReceiptItemListVisualizer extends React.Component {
-  header = [
-    "Item",
-    "Marca",
-    "Modelo",
-    "Descripción",
-    "Cantidad",
-    "PP",
-    "BI",
-    "PVP",
-    "Total",
+import Table from "../common/Table";
+
+const ReceiptItemListVisualizer = (props) => {
+  let items = props.items || [];
+
+  const amountUpdate = (e) => {
+    const index = e.target.parentElement.parentElement.firstChild.innerHTML;
+    const amount = e.target.value;
+    props.updateItem(index, { amount: amount });
+  };
+
+  const biUpdate = (e) => {
+    const index = e.target.parentElement.parentElement.firstChild.innerHTML;
+    const bi = e.target.value;
+    props.updateItem(index, { bi: bi });
+  };
+
+  const deleteItem = (e) => {
+    const index = e.target.parentElement.firstChild.innerHTML;
+    console.log(index);
+    props.deleteItem(index);
+  };
+
+  const rowItems = items.map((item, i) => [
+    i,
+    item.brand,
+    item.model,
+    item.description,
+    <input onChange={amountUpdate} value={item.amount} />,
+    `${item.provider_price} €`,
+    <input onChange={biUpdate} value={item.bi} />,
+    `${item.pvp} €`,
+    `${item.total} €`,
+  ]);
+
+  const rows = [
+    [
+      "Item",
+      "Marca",
+      "Modelo",
+      "Descripción",
+      "Cantidad",
+      "PP",
+      "BI",
+      "PVP",
+      "Total",
+    ],
+    ...rowItems,
   ];
 
-  render() {
-    let header = this.header;
-    let rows = this.props.items || [];
-    return (
-        <div id="excel_receipt_container">
-          <table className="table-striped">
-            <thead>
-              <tr>
-                {header.map((e, i) => (
-                  <th key={i}>{e}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((item, i) => (
-                <tr onDoubleClick={() => this.props.onDelete(item.ref)} key={i}>
-                  <td> {i} </td>
-                  <td> {item.brand} </td>
-                  <td> {item.model} </td>
-                  <td> {item.description} </td>
-                  <td>
-                    <input
-                      onChange={(e) => this.props.amountUpdate(e, item.ref)}
-                      value={item.amount}
-                    />
-                  </td>
-                  <td> {item.provider_price} €</td>
-                  <td>
-                    <input
-                      onChange={(e) => this.props.biUpdate(e, item.ref)}
-                      value={item.bi}
-                    />
-                  </td>
-                  <td> {item.pvp} € </td>
-                  <td> {item.total} €</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-    );
-  }
-}
+  return (
+    <div className="excel_receipt_container">
+      <Table rows={rows} onDoubleClick={deleteItem} />
+    </div>
+  );
+};
 
 export default ReceiptItemListVisualizer;

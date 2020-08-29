@@ -32,9 +32,6 @@ class ReceiptPage extends React.Component {
 
     this.changeSpreadSheet = this.changeSpreadSheet.bind(this);
     this.addItemToReceipt = this.addItemToReceipt.bind(this);
-    this.onUpdateItemAmount = this.onUpdateItemAmount.bind(this);
-    this.onUpdateItemBI = this.onUpdateItemBI.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
     this.updateFile = this.updateFile.bind(this);
     this.updatePDFFiles = this.updatePDFFiles.bind(this);
     this.updateClientData = this.updateClientData.bind(this);
@@ -100,45 +97,33 @@ class ReceiptPage extends React.Component {
       total: 0,
     };
     this.setState({ items: [...this.state.items, newItem] }, () =>
-      this.updateItem(ref, { amount: 1, bi: 0 })
+      this.updateItem(this.state.items.length - 1, { amount: 1, bi: 0 })
     );
   }
 
-  updateItem(ref, { amount, bi }) {
-    let i = this.state.items.findIndex((item) => item.ref === ref);
-    let newItemList = [...this.state.items];
-    let newAmount = amount || newItemList[i].amount;
-    let newBI = bi || newItemList[i].bi;
-    let pvp = (newItemList[i].provider_price * (1 + newBI / 100.0)).toFixed(2);
-    let total = (pvp * newAmount).toFixed(2);
+  updateItem = (i, { amount, bi }) => {
+    let items = [...this.state.items];
+    amount = amount === undefined ? items[i].amount : parseInt(amount) || 1.0;
+    bi = bi === undefined ? items[i].bi : parseFloat(bi) || 0.0;
 
-    newItemList[i] = {
-      ...newItemList[i],
-      amount: newAmount,
-      bi: newBI,
+    let pvp = (items[i].provider_price * (1 + bi / 100.0)).toFixed(2);
+    let total = (pvp * amount).toFixed(2);
+
+    items[i] = {
+      ...items[i],
+      amount: amount,
+      bi: bi,
       pvp: pvp,
       total: total,
     };
 
-    this.setState({ items: newItemList });
-  }
+    this.setState({ items: items });
+  };
 
-  onUpdateItemAmount(event, ref) {
-    event.persist();
-    let newAmount = parseFloat(event.target.value);
-    this.updateItem(ref, { amount: newAmount });
-  }
-
-  onUpdateItemBI(event, ref) {
-    event.persist();
-    let newBI = parseFloat(event.target.value);
-    this.updateItem(ref, { bi: newBI });
-  }
-
-  deleteItem(ref) {
-    let newItemList = this.state.items.filter((item) => ref !== item.ref);
-    this.setState({ items: newItemList || [] });
-  }
+  deleteItem = (i) => {
+    let items = this.state.items.filter((item, j) => parseInt(i) !== j);
+    this.setState({ items: items || [] });
+  };
 
   render() {
     let sheetData = this.state.page || [];
@@ -160,10 +145,9 @@ class ReceiptPage extends React.Component {
               addItem={this.addItemToReceipt}
             />
             <ReceiptItemListVisualizer
+              updateItem={this.updateItem}
               items={this.state.items}
-              amountUpdate={this.onUpdateItemAmount}
-              biUpdate={this.onUpdateItemBI}
-              onDelete={this.deleteItem}
+              deleteItem={this.deleteItem}
             />
             <Total items={this.state.items} />
             <ClientData updateData={this.updateClientData} />

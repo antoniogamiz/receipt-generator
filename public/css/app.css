@@ -1,5 +1,5 @@
 .excel_worksheet_container,
-#excel_receipt_container {
+.excel_receipt_container {
   height: 200px;
   overflow: auto;
   border: 1px solid black;
