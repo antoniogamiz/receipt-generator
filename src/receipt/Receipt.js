@@ -40,9 +40,9 @@ const Receipt = ({ items, setItems }) => {
       amount === undefined ? newItems[i].amount : parseInt(amount) || 1.0;
     bi = bi === undefined ? newItems[i].bi : parseFloat(bi) || 0.0;
 
-    let pvp = (newItems[i].provider_price * (1 + bi / 100.0)).toFixed(2);
-    let total = (pvp * amount).toFixed(2);
-
+    let pvp = newItems[i].provider_price * (1 + bi / 100.0);
+    let total = pvp * amount;
+    console.log(pvp);
     newItems[i] = {
       ...newItems[i],
       amount: amount,
@@ -67,7 +67,7 @@ const Receipt = ({ items, setItems }) => {
       amount: 1,
       provider_price: provider_price,
       bi: 0,
-      pvp: 0,
+      pvp: provider_price,
       total: provider_price,
     };
     setItems([...items, newItem]);
