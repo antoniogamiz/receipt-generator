@@ -5,7 +5,7 @@ const PDFIncluder = ({ files, onUpdate }) => {
     let paths = Array.from(e.target.files).map((f) => f.path);
     onUpdate(paths);
   };
-  files = files.map((f) => f.replace(/^.*[\\\/]/, ""));
+  files = files.map((f) => f.replace(/^.*[\\/]/, ""));
   return (
     <div id="input_pdf_container" className="form-group">
       <input

@@ -2,7 +2,7 @@ import React from "react";
 
 import Footer from "./components/Footer";
 import Title from "./components/Title";
-import ReceiptPage from "./components/ReceiptPage";
+import ReceiptPage from "./receipt/ReceiptPage";
 
 class App extends React.Component {
   render() {

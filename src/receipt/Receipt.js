@@ -9,7 +9,7 @@ import Total from "./Total";
 
 const Tabs = (props) => {
   return (
-    <div class="tab-group">
+    <div className="tab-group">
       {props.names.map((name, i) => (
         <div
           key={i}

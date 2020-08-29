@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
-import ClientData from "../receipt/ClientData";
+import ClientData from "./ClientData";
 import PDFIncluder from "./PDFIncluder";
 import LatexGenerator from "./LatexGenerator";
-import Receipt from "../receipt/Receipt";
+import Receipt from "./Receipt";
+
+import { generatePDF } from "../utils/latex";
 
 const ReceiptPage = (props) => {
   const [items, setItems] = useState([]);
@@ -12,7 +14,7 @@ const ReceiptPage = (props) => {
     address: { label: "Dirección", value: "" },
     cp: { label: "CP", value: "" },
     city: { label: "Ciudad", value: "" },
-    nif: { label: "nif", value: "" },
+    nif: { label: "NIF", value: "" },
     installationAddress: { label: "Emplazamiento Instalación", value: "" },
     clientNumber: { label: "Nº Cliente", value: "" },
     budgetNumber: { label: "Nº Presupuesto", value: "" },
@@ -21,7 +23,11 @@ const ReceiptPage = (props) => {
   const [texFile, setTexFile] = useState("main.tex");
 
   const compile = () => {
-    console.log(texFile);
+    generatePDF(texFile, {
+      items: items,
+      clientData: clientData,
+      pdfFiles: pdfFiles,
+    });
   };
 
   return (

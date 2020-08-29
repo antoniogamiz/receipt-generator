@@ -6,7 +6,7 @@ const addEuroSymbol = (str) => `${str.toFixed(2)} €`;
 
 const Total = (props) => {
   const rows = [
-    ["Subtotal", "IVA (21%)", "General Expenses", "Total"],
+    ["Subtotal", "IVA (21%)", "Gastos Generales", "Total"],
     [
       props.subtotal,
       props.subtotal * 0.21,

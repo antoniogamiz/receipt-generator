@@ -3,8 +3,10 @@ const app = electron.app;
 const path = require("path");
 const isDev = require("electron-is-dev");
 require("electron-reload");
-const BrowserWindow = electron.BrowserWindow;
+const PDFWindow = require("electron-pdf-window");
 
+const BrowserWindow = electron.BrowserWindow;
+const ipcMain = electron.ipcMain;
 let mainWindow;
 
 function createWindow() {
@@ -39,4 +41,13 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on("show-pdf", (event, pdfPath) => {
+  const win = new PDFWindow({
+    width: 800,
+    height: 600,
+  });
+
+  win.loadURL(`file://${pdfPath}`);
 });
