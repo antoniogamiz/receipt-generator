@@ -1,19 +1,29 @@
 import React from "react";
 
-const InputField = ({ title, onChange, id }) => {
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  input: {
+    margin: "2px",
+  },
+}));
+
+const InputField = ({ label, onChange, id }) => {
+  const classes = useStyles();
+
   const handleChange = (event) => {
     const text = event.target.value;
     onChange(id, text);
   };
+
   return (
-    <div className="form-group">
-      <label>{title}</label>
-      <input
-        className="form-control"
-        onChange={handleChange}
-        placeholder={title}
-      />
-    </div>
+    <TextField
+      className={classes.input}
+      label={label}
+      id="standard-password-input"
+      onChange={handleChange}
+    />
   );
 };
 
@@ -29,7 +39,7 @@ const ClientData = (props) => {
       id={field}
       onChange={handleFieldChange}
       value={props.fields[field].value}
-      title={props.fields[field].label}
+      label={props.fields[field].label}
     />
   ));
   return <div className="grid-container-client-data">{fields}</div>;

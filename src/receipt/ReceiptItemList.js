@@ -1,6 +1,6 @@
 import React from "react";
 
-import Table from "../common/Table";
+import Table from "../common/SpreadTable";
 
 const ReceiptItemListVisualizer = (props) => {
   let items = props.items || [];
@@ -53,7 +53,7 @@ const ReceiptItemListVisualizer = (props) => {
   ];
 
   return (
-    <div className="excel_receipt_container">
+    <div style={{ height: "200px" }}>
       <Table rows={rows} onDoubleClick={deleteItem} />
     </div>
   );

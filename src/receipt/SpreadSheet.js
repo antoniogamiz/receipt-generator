@@ -1,6 +1,6 @@
 import React from "react";
 
-import Table from "../common/Table";
+import Table from "../common/SpreadTable";
 
 const SpreadSheetVisualizer = (props) => {
   const onDoubleClick = (e) => {
@@ -8,7 +8,7 @@ const SpreadSheetVisualizer = (props) => {
     props.addItem(ref);
   };
   return (
-    <div className="excel_worksheet_container">
+    <div style={{ height: "200px" }}>
       <Table rows={props.sheet} onDoubleClick={onDoubleClick} />
     </div>
   );

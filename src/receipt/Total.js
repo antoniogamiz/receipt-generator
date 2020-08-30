@@ -1,6 +1,6 @@
 import React from "react";
 
-import Table from "../common/Table";
+import Table from "../common/SpreadTable";
 
 const addEuroSymbol = (str) => `${str.toFixed(2)} €`;
 

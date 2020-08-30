@@ -39,8 +39,11 @@ const ReceiptPage = (props) => {
         <div className="pane">
           <Receipt items={items} setItems={setItems} />
           <ClientData onUpdate={setClientData} fields={clientData} />
-          <PDFIncluder files={pdfFiles} onUpdate={setPdfFiles} />
-          <LatexGenerator compile={compile} updateTexFile={setTexFile} />
+          <LatexGenerator
+            compile={compile}
+            updatePDFFiles={setPdfFiles}
+            updateTexFile={setTexFile}
+          />
         </div>
       </div>
     </div>

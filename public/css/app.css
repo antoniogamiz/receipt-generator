@@ -1,21 +1,5 @@
 /* Receipt Component */
 
-.excel_receipt_container {
-  height: 200px;
-  overflow: auto;
-  border: 1px solid black;
-}
-
-.excel_worksheet_container {
-  height: 200px;
-  overflow: auto;
-}
-
-#total_table {
-  border: 1px solid black;
-  margin: 10px;
-}
-
 #tool-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -35,17 +19,6 @@
 
 /* Tables */
 
-td,
-th {
-  text-align: center;
-  vertical-align: middle;
-}
-
-td input {
-  width: 100%;
-  text-align: center;
-}
-
 /* ClientData */
 
 .grid-container-client-data {
@@ -54,43 +27,4 @@ td input {
   grid-template-rows: 1fr 1fr 1fr 1fr;
   gap: 1px 1px;
   margin: 20px;
-}
-
-/* ------------ */
-
-#input_pdf_container {
-  border: 1px solid black;
-  margin: 5px;
-  display: flex;
-  align-items: center;
-}
-
-#input_pdf_container input {
-  margin: 5px 5px;
-  width: 180px;
-}
-
-#input_pdf_container p {
-  margin: 4px 0px;
-}
-
-/* ------------ */
-
-label {
-  padding: 2px;
-  border-radius: 5px;
-}
-
-#latex_container {
-  border: 1px solid black;
-  margin: 5px;
-  display: flex;
-  align-items: center;
-}
-#latex_container label {
-  margin: 4px;
-}
-
-#latex_container button {
-  margin: 0 10%;
 }

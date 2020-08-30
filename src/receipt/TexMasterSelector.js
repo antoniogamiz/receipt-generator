@@ -8,36 +8,36 @@ const path = window.require("path");
 const useStyles = makeStyles((theme) => ({
   p: {
     padding: theme.spacing(1),
+    textAlign: "center",
     color: theme.palette.text.secondary,
   },
 }));
 
-const PDFIncluder = ({ onChange }) => {
+const TexMasterSelector = ({ onChange }) => {
   const classes = useStyles();
-  const [files, setFiles] = useState(["No PDF files selected"]);
+  const [file, setFile] = useState("No tex file selected");
 
   const handleChange = (e) => {
-    let paths = Array.from(e.target.files).map((f) => f.path);
-    onChange(paths);
-    setFiles(paths);
+    let path = e.target.files[0].path;
+    onChange(path);
+    setFile(path);
   };
+
   return (
     <div>
       <Button variant="contained" component="label">
-        Upload File
+        Select .tex file
         <input
           type="file"
           style={{ display: "none" }}
           onChange={handleChange}
           multiple="multiple"
-          accept=".pdf"
+          accept=".tex"
         />
       </Button>
-      <Paper className={classes.p}>
-        {files.map((f) => path.basename(f)).join(", ")}
-      </Paper>
+      <Paper className={classes.p}>{path.basename(file)}</Paper>
     </div>
   );
 };
 
-export default PDFIncluder;
+export default TexMasterSelector;

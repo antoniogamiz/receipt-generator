@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
 
 import XLSX from "../utils/xlsx";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 
 import ToolBar from "./ToolBar";
 import SpreadSheet from "./SpreadSheet";
 import ReceiptItemList from "./ReceiptItemList";
 import Total from "./Total";
 
-const Tabs = (props) => {
+const SpreadTabs = (props) => {
+  if (!props.names.length) return "";
   return (
-    <div className="tab-group">
+    <Box border={1} borderColor="primary.main">
       {props.names.map((name, i) => (
-        <div
-          key={i}
-          onClick={() => props.setSpreadData(i)}
-          className="tab-item"
-        >
-          {name}
-        </div>
+        <Tab label={name} onClick={() => props.setSpreadData(i)} />
       ))}
-    </div>
+    </Box>
   );
 };
 
@@ -91,8 +88,12 @@ const Receipt = ({ items, setItems }) => {
   return (
     <div className="receipt_container">
       <ToolBar updateFile={setXLSXFile} updateSearch={updateSearchResults} />
-      <Tabs setSpreadData={changeTab} names={xlsx.sheetNames} />
-      <SpreadSheet sheet={spreadData} addItem={addItemToReceipt} />
+      <SpreadTabs setSpreadData={changeTab} names={xlsx.sheetNames} />
+      {spreadData.length ? (
+        <SpreadSheet sheet={spreadData} addItem={addItemToReceipt} />
+      ) : (
+        ""
+      )}
       <ReceiptItemList
         updateItem={updateItem}
         items={items}
