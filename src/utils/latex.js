@@ -1,5 +1,4 @@
 const path = window.require("path");
-const { platform } = window.require("os");
 const { promises: fs } = window.require("fs");
 const { exec } = window.require("child_process");
 const { ipcRenderer } = window.require("electron");
@@ -62,9 +61,7 @@ export const generatePDF = async (pathFile, data) => {
   await fs.writeFile(pathFile, newMasterTex);
   await fs.writeFile(templatePath, newTemplateTex);
 
-  let osType = platform();
-  let windows_option = osType === "win32" ? "/d" : "";
-  let command = `cd ${windows_option} ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
+  let command = `pushd ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename} && popd`;
   exec(command, (error, stdout, stderr) => {
     fs.writeFile(pathFile, originalMasterTex);
     fs.writeFile(templatePath, originalTemplateTex);
