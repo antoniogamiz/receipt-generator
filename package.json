@@ -1,29 +1,37 @@
 {
   "name": "receipt-generator",
+  "description": "Receipt PDF generator",
   "version": "0.1.0",
-  "private": true,
-  "main": "src/start.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "build": {
-    "appId": "some.id.ofyours",
+    "appId": "receipt-pdf",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "data"
     },
+    "productName": "Receipt PDF Generator",
     "win": {
-      "category": "your.app.category.type",
-      "iconUrl": "path-to-icon.png"
+      "publish": {
+        "provider": "github",
+        "owner": "antoniogamiz"
+      },
+      "target": [
+        "portable"
+      ]
     },
-    "mac": {
-      "category": "your.app.category.type",
-      "iconUrl": "path-to-icon.png"
+    "portable": {
+      "artifactName": "receipt-pdf.exe"
     }
   },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "electron": "^10.0.0",
-    "electron-is-dev": "^1.2.0",
     "electron-pdf-window": "^1.0.12",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -36,7 +44,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "pack": "electron-builder --publish always --win -c.extraMetadata.main=build/electron.js",
+    "dist": "npm run build && npm run pack"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,8 +64,21 @@
     ]
   },
   "devDependencies": {
+    "electron": "^10.0.0",
+    "electron-is-dev": "^1.2.0",
     "electron-builder": "^22.8.0",
     "electron-reload": "^1.5.0",
     "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antoniogamiz/receipt-generator.git"
+  },
+  "keywords": [],
+  "author": "@antoniogamiz",
+  "email": "antoniogamiz10@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antoniogamiz/receipt-generator/issues"
   }
 }
