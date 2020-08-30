@@ -1,5 +1,8 @@
 import React from "react";
 
+import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/Save";
+
 const LatexGenerator = ({ updateTexFile, compile }) => {
   const handleChange = (e) => {
     updateTexFile(e.target.files[0].path);
@@ -13,9 +16,15 @@ const LatexGenerator = ({ updateTexFile, compile }) => {
         type="file"
         accept=".tex"
       />
-      <button onClick={compile} className="btn btn-positive">
-        Generate PDF!
-      </button>
+      <Button
+        onClick={compile}
+        variant="contained"
+        color="primary"
+        size="small"
+        startIcon={<SaveIcon />}
+      >
+        Save
+      </Button>
     </div>
   );
 };
