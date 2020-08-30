@@ -2,8 +2,11 @@ const electron = require("electron");
 const app = electron.app;
 const path = require("path");
 const isDev = require("electron-is-dev");
-require("electron-reload");
 const PDFWindow = require("electron-pdf-window");
+
+if (isDev) {
+  require("electron-reload");
+}
 
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;

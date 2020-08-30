@@ -1,7 +1,6 @@
 const path = window.require("path");
-// const fs = window.require("fs");
+const { platform } = window.require("os");
 const { promises: fs } = window.require("fs");
-
 const { exec } = window.require("child_process");
 const { ipcRenderer } = window.require("electron");
 
@@ -12,7 +11,9 @@ const replaceClientData = (text, data) => {
     .replace("!CP!", data.clientData.cp.value)
     .replace("!CITY!", data.clientData.city.value)
     .replace("!NIF!", data.clientData.nif.value)
-    .replace("!PHONENUMBER!", "1234w56789")
+    .replace("!PHONENUMBER!", data.clientData.mobile.value)
+    .replace("!AZIMUT!", data.clientData.azimut.value)
+    .replace("!INSTALLATIONTYPE!", data.clientData.installationType.value)
     .replace("!INSTALLATIONADDRESS!", data.clientData.installationAddress.value)
     .replace("!CLIENTNUMBER!", data.clientData.clientNumber.value)
     .replace("!BUDGETNUMBER!", data.clientData.budgetNumber.value);
@@ -61,7 +62,9 @@ export const generatePDF = async (pathFile, data) => {
   await fs.writeFile(pathFile, newMasterTex);
   await fs.writeFile(templatePath, newTemplateTex);
 
-  let command = `cd ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
+  let osType = platform();
+  let windows_option = osType === "win32" ? "/d" : "";
+  let command = `cd ${windows_option} ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
   exec(command, (error, stdout, stderr) => {
     fs.writeFile(pathFile, originalMasterTex);
     fs.writeFile(templatePath, originalTemplateTex);

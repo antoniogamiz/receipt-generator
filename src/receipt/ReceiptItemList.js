@@ -29,10 +29,11 @@ const ReceiptItemListVisualizer = (props) => {
     item.model,
     item.description,
     <input onChange={amountUpdate} value={item.amount} />,
-    `${item.provider_price} €`,
+    `${item.provider_price.toFixed(2)} €`,
     <input onChange={biUpdate} value={item.bi} />,
-    `${item.pvp} €`,
-    `${item.total} €`,
+    `${item.pvp.toFixed(2)} €`,
+    `${item.total.toFixed(2)} €`,
+    `${((item.pvp - item.provider_price) * item.amount).toFixed(2)} €`,
   ]);
 
   const rows = [
@@ -43,9 +44,10 @@ const ReceiptItemListVisualizer = (props) => {
       "Descripción",
       "Cantidad",
       "PP",
-      "BI",
+      "BI (%)",
       "PVP",
       "Total",
+      "Ganancia",
     ],
     ...rowItems,
   ];

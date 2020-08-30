@@ -16,6 +16,9 @@ const ReceiptPage = (props) => {
     city: { label: "Ciudad", value: "" },
     nif: { label: "NIF", value: "" },
     installationAddress: { label: "Emplazamiento Instalación", value: "" },
+    installationType: { label: "Tipo de instalación", value: "" },
+    mobile: { label: "Móvil", value: "" },
+    azimut: { label: "Azimut", value: "" },
     clientNumber: { label: "Nº Cliente", value: "" },
     budgetNumber: { label: "Nº Presupuesto", value: "" },
   });
