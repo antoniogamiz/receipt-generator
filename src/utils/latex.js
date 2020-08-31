@@ -61,23 +61,29 @@ export const generatePDF = async (pathFile, data) => {
   await fs.writeFile(pathFile, newMasterTex);
   await fs.writeFile(templatePath, newTemplateTex);
 
-  let command = `pushd ${directory} && pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename} && popd`;
-  exec(command, (error, stdout, stderr) => {
-    fs.writeFile(pathFile, originalMasterTex);
-    fs.writeFile(templatePath, originalTemplateTex);
+  let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
+  exec(
+    command,
+    {
+      cwd: directory,
+    },
+    (error, stdout, stderr) => {
+      fs.writeFile(pathFile, originalMasterTex);
+      fs.writeFile(templatePath, originalTemplateTex);
 
-    if (error || stderr) {
-      console.log(`error: ${error.message}`);
-      console.log(`stderr: ${stderr}`);
-      console.log(stdout);
-      return;
+      if (error || stderr) {
+        console.log(`error: ${error.message}`);
+        console.log(`stderr: ${stderr}`);
+        console.log(stdout);
+        return;
+      }
+
+      openPDF(
+        path.format({
+          dir: directory,
+          base: filename.replace(".tex", ".pdf"),
+        })
+      );
     }
-
-    openPDF(
-      path.format({
-        dir: directory,
-        base: filename.replace(".tex", ".pdf"),
-      })
-    );
-  });
+  );
 };

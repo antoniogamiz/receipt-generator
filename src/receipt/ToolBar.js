@@ -4,11 +4,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: "5px",
+    margin: theme.spacing(1),
   },
 }));
 
@@ -21,34 +23,32 @@ const ToolBar = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <input
-            className="form-control"
-            placeholder="Reference"
-            id="search-reference"
-            onChange={props.updateSearch}
-          />{" "}
-        </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            component="label"
-            color="primary"
-            size="small"
-            startIcon={<InsertDriveFileIcon />}
-            style={{ height: "20px", padding: "12px" }}
-          >
-            XSLX file
-            <input
-              type="file"
-              style={{ display: "none" }}
-              onChange={updateFile}
-              accept=".xlsx"
+      <Paper elevation={5}>
+        <Grid container spacing={3}>
+          <Grid item xs={6} align="center">
+            <TextField
+              label="Search by reference"
+              onChange={props.updateSearch}
             />
-          </Button>{" "}
+          </Grid>
+          <Grid item xs={6} align="center">
+            <Button
+              variant="contained"
+              component="label"
+              color="primary"
+              startIcon={<InsertDriveFileIcon />}
+            >
+              XSLX file
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={updateFile}
+                accept=".xlsx"
+              />
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     </div>
   );
 };

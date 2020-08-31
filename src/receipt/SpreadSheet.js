@@ -8,8 +8,12 @@ const SpreadSheetVisualizer = (props) => {
     props.addItem(ref);
   };
   return (
-    <div style={{ height: "200px" }}>
-      <Table rows={props.sheet} onDoubleClick={onDoubleClick} />
+    <div>
+      <Table
+        maxHeight="250px"
+        rows={props.sheet}
+        onDoubleClick={onDoubleClick}
+      />
     </div>
   );
 };

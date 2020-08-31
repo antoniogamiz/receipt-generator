@@ -1,19 +1,22 @@
 import React from "react";
 
-import Footer from "./components/Footer";
-import Title from "./components/Title";
 import ReceiptPage from "./receipt/ReceiptPage";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="window">
-        <Title />
-        <ReceiptPage />
-        <Footer />
-      </div>
-    );
-  }
-}
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(3),
+  },
+}));
+
+const App = (props) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <ReceiptPage />
+    </div>
+  );
+};
 
 export default App;

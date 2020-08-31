@@ -1,14 +1,12 @@
 const xlsxFile = window.require("read-excel-file/node");
 
-const DEFAULT_PATH = "data/test.xlsx";
-
 class XLSX {
   path;
   pages = [];
   pagesName = [];
 
-  constructor(path = DEFAULT_PATH) {
-    this.path = DEFAULT_PATH;
+  constructor(path) {
+    this.path = path;
   }
 
   async load() {

@@ -53,8 +53,8 @@ const ReceiptItemListVisualizer = (props) => {
   ];
 
   return (
-    <div style={{ height: "200px" }}>
-      <Table rows={rows} onDoubleClick={deleteItem} />
+    <div style={{ marginTop: "20px" }}>
+      <Table maxHeight="250px" rows={rows} onDoubleClick={deleteItem} />
     </div>
   );
 };

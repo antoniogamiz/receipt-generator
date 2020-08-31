@@ -20,32 +20,41 @@ const SpreadTable = (props) => {
   let rows = props.rows.length ? props.rows.slice(1) : [];
 
   return (
-    <TableContainer component={Paper}>
-      <Table size="small" className={classes.table} aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            {header.map((text) => (
-              <TableCell align="center">{text}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              style={{ height: "10px" }}
-              onDoubleClick={props.onDoubleClick}
-              key={row[0]}
-            >
-              {row.map((text) => (
-                <TableCell fontSize="small" align="right">
-                  {text}
-                </TableCell>
+    <div>
+      <TableContainer
+        component={Paper}
+        style={{ maxHeight: props.maxHeight, minHeight: props.maxHeight }}
+      >
+        <Table
+          size="small"
+          className={classes.table}
+          aria-label="a dense table"
+        >
+          <TableHead>
+            <TableRow>
+              {header.map((text) => (
+                <TableCell align="center">{text}</TableCell>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                // style={{ height: "10px" }}
+                onDoubleClick={props.onDoubleClick}
+                key={row[0]}
+              >
+                {row.map((text) => (
+                  <TableCell fontSize="small" align="center">
+                    {text}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 };
 

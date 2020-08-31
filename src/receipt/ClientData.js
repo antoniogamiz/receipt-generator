@@ -1,9 +1,14 @@
 import React from "react";
 
 import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(1),
+  },
   input: {
     margin: "2px",
   },
@@ -28,21 +33,34 @@ const InputField = ({ label, onChange, id }) => {
 };
 
 const ClientData = (props) => {
+  const classes = useStyles();
+
   const handleFieldChange = (fieldId, value) => {
     let tmp = { ...props.fields[fieldId], value: value };
     props.onUpdate({ ...props.fields, [fieldId]: tmp });
   };
 
   const fields = Object.keys(props.fields).map((field) => (
-    <InputField
-      key={field}
-      id={field}
-      onChange={handleFieldChange}
-      value={props.fields[field].value}
-      label={props.fields[field].label}
-    />
+    <Grid item xs={6} align="center">
+      <InputField
+        key={field}
+        id={field}
+        onChange={handleFieldChange}
+        value={props.fields[field].value}
+        label={props.fields[field].label}
+        className={classes.center}
+      />
+    </Grid>
   ));
-  return <div className="grid-container-client-data">{fields}</div>;
+  return (
+    <div className={classes.root}>
+      <Paper elevation={5}>
+        <Grid container spacing={1}>
+          {fields}
+        </Grid>
+      </Paper>
+    </div>
+  );
 };
 
 export default ClientData;

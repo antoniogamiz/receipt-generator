@@ -16,8 +16,8 @@ const Total = (props) => {
   ];
 
   return (
-    <div id="total_table">
-      <Table rows={rows} />
+    <div id="total_table" style={{ marginTop: "20px" }}>
+      <Table maxHeight="70px" rows={rows} />
     </div>
   );
 };
