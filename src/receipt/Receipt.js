@@ -32,6 +32,8 @@ const SpreadTabs = (props) => {
 const Receipt = ({ items, setItems }) => {
   const [xlsx, setXLSX] = useState();
   const [spreadData, setSpreadData] = useState([]);
+  const [expectedTotal, setExpectedTotal] = useState(0);
+  const [checked, setChecked] = useState(false);
 
   const handleXLSXChange = (path) => {
     const newXLSX = new XLSX(path);
@@ -46,7 +48,7 @@ const Receipt = ({ items, setItems }) => {
 
     let pvp = newItems[i].provider_price * (1 + bi / 100.0);
     let total = pvp * amount;
-    console.log(pvp);
+
     newItems[i] = {
       ...newItems[i],
       amount: amount,
@@ -81,7 +83,8 @@ const Receipt = ({ items, setItems }) => {
     setItems(items.filter((item, j) => parseInt(i) !== j) || []);
   };
 
-  const computeTotal = () => items.reduce((x, e) => x + parseFloat(e.total), 0);
+  const computeTotal = (items) =>
+    items.reduce((x, e) => x + parseFloat(e.total), 0);
 
   const changeTab = (i) => {
     setSpreadData(xlsx.pages[i]);
@@ -97,11 +100,36 @@ const Receipt = ({ items, setItems }) => {
     else setSpreadData(xlsx.pages[0]);
   };
 
+  const updateExpectedTotal = (e) => {
+    setExpectedTotal(parseFloat(e.target.value || 0));
+  };
+
+  const affectedByExpectedTotal = () => {
+    if (!checked) return items;
+
+    let total = computeTotal(items);
+    const lambda = (expectedTotal || total) / total;
+
+    const newItems = items.map((item) => {
+      const newBI = (lambda * (1 + item.bi / 100) - 1) * 100;
+      const pvp = item.provider_price * (1 + newBI / 100.0);
+      const total = pvp * item.amount;
+      return { ...item, bi: newBI, pvp: pvp, total: total };
+    });
+
+    return newItems;
+  };
+
+  const onCheckChange = () => {
+    setChecked(!checked);
+  };
+
   useEffect(() => {
     if (xlsx !== undefined && !spreadData.length) {
       setSpreadData(xlsx.pages[0]);
     }
   }, []);
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -120,10 +148,16 @@ const Receipt = ({ items, setItems }) => {
         )}
         <ReceiptItemList
           updateItem={updateItem}
-          items={items}
+          items={affectedByExpectedTotal(items)}
           deleteItem={deleteItem}
         />
-        <Total subtotal={computeTotal()} />
+        <Total
+          subtotal={computeTotal(affectedByExpectedTotal(items))}
+          expectedTotal={expectedTotal}
+          onChange={updateExpectedTotal}
+          checked={checked}
+          onCheckChange={onCheckChange}
+        />
       </Paper>
     </div>
   );
