@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     margin: "2px",
+    width: "80%",
   },
 }));
 
@@ -48,7 +49,7 @@ const ClientData = (props) => {
         onChange={handleFieldChange}
         value={props.fields[field].value}
         label={props.fields[field].label}
-        className={classes.center}
+        className={classes.input}
       />
     </Grid>
   ));
