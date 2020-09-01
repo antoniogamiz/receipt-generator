@@ -50,7 +50,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --publish always --win -c.extraMetadata.main=build/electron.js",
-    "dist": "npm run build && npm run pack",
+    "dist": "npm run build && electron-builder --publish always --win -c.extraMetadata.main=build/electron.js",
     "exe": "npm run build && electron-builder --win -c.extraMetadata.main=build/electron.js"
   },
   "eslintConfig": {
