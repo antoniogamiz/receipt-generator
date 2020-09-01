@@ -38,12 +38,8 @@ const SpreadTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                // style={{ height: "10px" }}
-                onDoubleClick={props.onDoubleClick}
-                key={row[0]}
-              >
+            {rows.map((row, i) => (
+              <TableRow onDoubleClick={props.onDoubleClick} key={i}>
                 {row.map((text) => (
                   <TableCell fontSize="small" align="center">
                     {text}

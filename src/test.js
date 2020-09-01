@@ -1,4 +1,4 @@
-const xlsxFile = window.require("read-excel-file/node");
+const xlsxFile = require("read-excel-file/node");
 
 class XLSX {
   path;
@@ -19,10 +19,9 @@ class XLSX {
 
       if (pageData.length === 0) {
         this.pagesName = this.pagesName.filter(
-          (name) => name !== this.pagesName[i]
+          (name) => name === this.pagesName[i]
         );
       }
-
       pageData = pageData.filter((row) => this.shouldNullRowBeDeleted(row));
       pageData = pageData.map((row) =>
         row.map((cell) => (cell === null ? "" : cell))
@@ -57,4 +56,9 @@ class XLSX {
   }
 }
 
-export default XLSX;
+const file = new XLSX("data/test2.xlsx");
+file.load().then(() => {
+  //   console.log(file.sheetNames);
+  // file.pages.map((page) => console.table(page));
+  console.table(file.pages[5]);
+});
