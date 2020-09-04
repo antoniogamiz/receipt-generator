@@ -11,7 +11,7 @@ const ReceiptItemListVisualizer = (props) => {
       e.target.parentElement.parentElement.parentElement.parentElement
         .firstChild.innerHTML;
     const amount = e.target.value;
-    props.updateItem(index, { amount: amount });
+    props.updateItem(parseInt(index), { amount: amount });
   };
 
   const biUpdate = (e) => {
@@ -19,7 +19,7 @@ const ReceiptItemListVisualizer = (props) => {
       e.target.parentElement.parentElement.parentElement.parentElement
         .firstChild.innerHTML;
     const bi = e.target.value;
-    props.updateItem(index, { bi: bi });
+    props.updateItem(parseInt(index), { bi: bi });
   };
 
   const deleteItem = (e) => {
@@ -36,13 +36,13 @@ const ReceiptItemListVisualizer = (props) => {
     <TextField
       onChange={amountUpdate}
       value={item.amount}
-      inputProps={{ style: { textAlign: "center" } }}
+      inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
     `${item.provider_price.toFixed(2)} €`,
     <TextField
       onChange={biUpdate}
       value={item.bi.toFixed(2)}
-      inputProps={{ style: { textAlign: "center" } }}
+      inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
     `${item.pvp.toFixed(2)} €`,
     `${item.total.toFixed(2)} €`,

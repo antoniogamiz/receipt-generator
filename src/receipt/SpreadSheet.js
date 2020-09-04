@@ -7,6 +7,7 @@ const SpreadSheetVisualizer = (props) => {
     const ref = e.target.parentElement.firstChild.innerHTML;
     props.addItem(ref);
   };
+
   return (
     <div>
       <Table
