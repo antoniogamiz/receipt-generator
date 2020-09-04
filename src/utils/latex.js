@@ -31,14 +31,14 @@ const replaceReceiptData = (text, data) => {
       (item, i) =>
         `${i} & ${item.brand} & ${item.description} & ${
           item.amount
-        } & ${item.pvp.toFixed(2)} & ${item.total.toFixed(2)} \\\\`
+        } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} €\\\\`
     )
     .join("\n");
   return text
-    .replace("!SUBTOTAL!", subtotal)
-    .replace("!IVA!", iva)
-    .replace("!GENERALEXPENSES!", generalExpenses)
-    .replace("!TOTAL!", total)
+    .replace("!SUBTOTAL!", `${subtotal} €`)
+    .replace("!IVA!", `${iva} €`)
+    .replace("!GENERALEXPENSES!", `${generalExpenses} €`)
+    .replace("!TOTAL!", `${total} €`)
     .replace("& & & & & \\\\", receiptTable);
 };
 

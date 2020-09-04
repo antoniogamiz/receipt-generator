@@ -32,8 +32,6 @@ const SpreadTabs = (props) => {
 const Receipt = ({ items, setItems }) => {
   const [xlsx, setXLSX] = useState();
   const [spreadData, setSpreadData] = useState([]);
-  const [expectedTotal, setExpectedTotal] = useState(0);
-  const [checked, setChecked] = useState(false);
 
   const handleXLSXChange = (path) => {
     const newXLSX = new XLSX(path);
@@ -41,7 +39,7 @@ const Receipt = ({ items, setItems }) => {
   };
 
   const updateItem = (i, { amount, bi }) => {
-    let newItems = [...items];
+    let newItems = [...items.items];
     amount =
       amount === undefined ? newItems[i].amount : parseInt(amount) || 1.0;
     bi = bi === undefined ? newItems[i].bi : parseFloat(bi) || 0.0;
@@ -57,11 +55,15 @@ const Receipt = ({ items, setItems }) => {
       total: total,
     };
 
-    setItems(newItems);
+    setItems({
+      ...items,
+      unmodifiedItems: newItems,
+      items: applyExpectedTotal({ ...items, unmodifiedItems: newItems }),
+    });
   };
 
   const addItemToReceipt = (ref) => {
-    if (items.find((e) => e.ref === ref)) return;
+    if (items.items.find((e) => e.ref === ref)) return;
 
     let item = xlsx.searchByReference(ref)[1];
     let provider_price = parseFloat(item[item.length - 1]);
@@ -76,11 +78,22 @@ const Receipt = ({ items, setItems }) => {
       pvp: provider_price,
       total: provider_price,
     };
-    setItems([...items, newItem]);
+    const newItems = [...items.items, newItem];
+
+    setItems({
+      ...items,
+      unmodifiedItems: newItems,
+      items: applyExpectedTotal({ ...items, unmodifiedItems: newItems }),
+    });
   };
 
   const deleteItem = (i) => {
-    setItems(items.filter((item, j) => parseInt(i) !== j) || []);
+    const newItems = items.items.filter((item, j) => parseInt(i) !== j) || [];
+    setItems({
+      ...items,
+      unmodifiedItems: newItems,
+      items: applyExpectedTotal({ ...items, unmodifiedItems: newItems }),
+    });
   };
 
   const computeTotal = (items) =>
@@ -101,16 +114,21 @@ const Receipt = ({ items, setItems }) => {
   };
 
   const updateExpectedTotal = (e) => {
-    setExpectedTotal(parseFloat(e.target.value || 0));
+    const expectedTotal = parseFloat(e.target.value || 0);
+    setItems({
+      ...items,
+      expectedTotal: expectedTotal,
+      items: applyExpectedTotal({ ...items, expectedTotal: expectedTotal }),
+    });
   };
 
-  const affectedByExpectedTotal = () => {
-    if (!checked) return items;
+  const applyExpectedTotal = (items) => {
+    if (!items.expectedTotalEnabled) return items.unmodifiedItems;
 
-    let total = computeTotal(items);
-    const lambda = (expectedTotal || total) / total;
+    let total = computeTotal(items.unmodifiedItems);
+    const lambda = (items.expectedTotal || total) / total;
 
-    const newItems = items.map((item) => {
+    const newItems = items.unmodifiedItems.map((item) => {
       const newBI = (lambda * (1 + item.bi / 100) - 1) * 100;
       const pvp = item.provider_price * (1 + newBI / 100.0);
       const total = pvp * item.amount;
@@ -121,7 +139,14 @@ const Receipt = ({ items, setItems }) => {
   };
 
   const onCheckChange = () => {
-    setChecked(!checked);
+    setItems({
+      ...items,
+      items: applyExpectedTotal({
+        ...items,
+        expectedTotalEnabled: !items.expectedTotalEnabled,
+      }),
+      expectedTotalEnabled: !items.expectedTotalEnabled,
+    });
   };
 
   useEffect(() => {
@@ -131,6 +156,7 @@ const Receipt = ({ items, setItems }) => {
   }, []);
 
   const classes = useStyles();
+  console.log(items);
   return (
     <div className={classes.root}>
       <ToolBar
@@ -148,14 +174,14 @@ const Receipt = ({ items, setItems }) => {
         )}
         <ReceiptItemList
           updateItem={updateItem}
-          items={affectedByExpectedTotal(items)}
+          items={items.items}
           deleteItem={deleteItem}
         />
         <Total
-          subtotal={computeTotal(affectedByExpectedTotal(items))}
-          expectedTotal={expectedTotal}
+          subtotal={computeTotal(items.items)}
+          expectedTotal={items.expectedTotal}
           onChange={updateExpectedTotal}
-          checked={checked}
+          checked={items.expectedTotalEnabled}
           onCheckChange={onCheckChange}
         />
       </Paper>

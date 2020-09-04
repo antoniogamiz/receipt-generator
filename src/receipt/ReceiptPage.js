@@ -13,7 +13,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReceiptPage = (props) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState({
+    unmodifiedItems: [],
+    items: [],
+    expectedTotal: 0,
+    expectedTotalEnabled: false,
+  });
+
   const [clientData, setClientData] = useState({
     name: { label: "Nombre", value: "" },
     address: { label: "Dirección", value: "" },
@@ -32,7 +38,7 @@ const ReceiptPage = (props) => {
 
   const compile = () => {
     generatePDF(texFile, {
-      items: items,
+      items: items.items,
       clientData: clientData,
       pdfFiles: pdfFiles,
     });
