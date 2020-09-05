@@ -54,16 +54,23 @@ export const generatePDF = async (pathFile, data) => {
     dir: directory,
     base: "client-budget.tex",
   });
+  const reportPath = path.format({
+    dir: directory,
+    base: "MemoriaDescriptiva.tex",
+  });
 
   let originalMasterTex = await fs.readFile(pathFile, "utf8");
   let originalTemplateTex = await fs.readFile(templatePath, "utf8");
+  let reportTemplateTex = await fs.readFile(reportPath, "utf8");
 
   let newMasterTex = replaceClientData(originalMasterTex, data);
   let newTemplateTex = replaceClientData(originalTemplateTex, data);
   newTemplateTex = replaceReceiptData(newTemplateTex, data);
+  let newReportTemplateTex = replaceClientData(reportTemplateTex, data);
 
   await fs.writeFile(pathFile, newMasterTex);
   await fs.writeFile(templatePath, newTemplateTex);
+  await fs.writeFile(reportPath, newReportTemplateTex);
 
   let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
   exec(
@@ -74,6 +81,7 @@ export const generatePDF = async (pathFile, data) => {
     (error, stdout, stderr) => {
       fs.writeFile(pathFile, originalMasterTex);
       fs.writeFile(templatePath, originalTemplateTex);
+      fs.writeFile(reportPath, reportTemplateTex);
 
       if (error || stderr) {
         console.log(`error: ${error.message}`);
