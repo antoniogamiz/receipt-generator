@@ -1,6 +1,7 @@
 const path = window.require("path");
 const { promises: fs } = window.require("fs");
-const { exec } = window.require("child_process");
+const util = window.require("util");
+const exec = util.promisify(window.require("child_process").exec);
 const { ipcRenderer } = window.require("electron");
 
 const replaceClientData = (text, data) => {
@@ -43,13 +44,81 @@ const replaceReceiptData = (text, data) => {
     .replace("& & & & & \\\\", receiptTable);
 };
 
+const replaceBusinessData = (text, data) => {
+  const subtotal = data.items
+    .reduce((x, e) => x + parseFloat(e.total), 0)
+    .toFixed(2);
+  const iva = (subtotal * 0.21).toFixed(2);
+  const generalExpenses = (subtotal * 0.13).toFixed(2);
+  const total = (subtotal * (1.0 + 0.21 + 0.13)).toFixed(2);
+
+  const receiptTable = data.items
+    .map(
+      (item, i) =>
+        `${item.ref} & ${item.brand} & ${item.description} & ${
+          item.amount
+        } & ${item.provider_price.toFixed(2)} € & ${item.bi.toFixed(
+          2
+        )} \\% & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € & ${(
+          item.total -
+          item.amount * item.pvp
+        ).toFixed(2)} € \\\\`
+    )
+    .join("\n");
+  const totalBenefits = data.items.reduce(
+    (accumulator, item) => item.total - item.amount * item.provider_price,
+    0
+  );
+  return text
+    .replace("!SUBTOTAL!", `${subtotal} € & ${totalBenefits} €`)
+    .replace("!IVA!", `${iva} €`)
+    .replace(
+      "!GENERALEXPENSES!",
+      `${generalExpenses} € & ${totalBenefits * 0.13} €`
+    )
+    .replace("!TOTAL1!", `${total} €`)
+    .replace("!TOTAL2!", `${total + totalBenefits * 0.13} €`)
+    .replace("& & & & & & & & \\\\", receiptTable);
+};
+
 const openPDF = (pdfPath) => {
   ipcRenderer.send("show-pdf", pdfPath);
 };
 
-export const generatePDF = async (pathFile, data) => {
+export const generateBusinessReport = async (pathFile, data) => {
   const directory = path.dirname(pathFile);
-  const filename = path.basename(pathFile);
+
+  const reportPath = path.format({
+    dir: directory,
+    base: "business-budget.tex",
+  });
+
+  let originalTemplateTex = await fs.readFile(reportPath, "utf8");
+  const newTemplateTex = replaceBusinessData(
+    replaceClientData(originalTemplateTex, data),
+    data
+  );
+
+  await fs.writeFile(reportPath, newTemplateTex);
+
+  let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape business-master.tex`;
+  const { stdout, stderr } = await exec(command, { cwd: directory });
+  console.log(`stderr: ${stderr}`);
+  console.log(stdout);
+
+  fs.writeFile(reportPath, originalTemplateTex);
+
+  openPDF(
+    path.format({
+      dir: directory,
+      base: "business-master.pdf",
+    })
+  );
+};
+
+export const generateClientReport = async (pathFile, data) => {
+  const directory = path.dirname(pathFile);
+  const clientMaster = path.basename(pathFile);
   const templatePath = path.format({
     dir: directory,
     base: "client-budget.tex",
@@ -72,30 +141,29 @@ export const generatePDF = async (pathFile, data) => {
   await fs.writeFile(templatePath, newTemplateTex);
   await fs.writeFile(reportPath, newReportTemplateTex);
 
-  let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${filename}`;
-  exec(
-    command,
-    {
-      cwd: directory,
-    },
-    (error, stdout, stderr) => {
-      fs.writeFile(pathFile, originalMasterTex);
-      fs.writeFile(templatePath, originalTemplateTex);
-      fs.writeFile(reportPath, reportTemplateTex);
+  let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${clientMaster}`;
+  const { stdout, stderr } = await exec(command, { cwd: directory });
 
-      if (error || stderr) {
-        console.log(`error: ${error.message}`);
-        console.log(`stderr: ${stderr}`);
-        console.log(stdout);
-        return;
-      }
+  fs.writeFile(pathFile, originalMasterTex);
+  fs.writeFile(templatePath, originalTemplateTex);
+  fs.writeFile(reportPath, reportTemplateTex);
 
-      openPDF(
-        path.format({
-          dir: directory,
-          base: filename.replace(".tex", ".pdf"),
-        })
-      );
-    }
+  console.log(`stderr: ${stderr}`);
+  console.log(stdout);
+
+  openPDF(
+    path.format({
+      dir: directory,
+      base: clientMaster.replace(".tex", ".pdf"),
+    })
   );
+};
+
+export const generatePDF = async (pathFile, data) => {
+  try {
+    await generateClientReport(pathFile, data);
+    await generateBusinessReport(pathFile, data);
+  } catch (e) {
+    alert(e.message);
+  }
 };

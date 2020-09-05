@@ -24,7 +24,6 @@ const ReceiptItemListVisualizer = (props) => {
 
   const deleteItem = (e) => {
     const index = e.target.parentElement.firstChild.innerHTML;
-    console.log(index);
     props.deleteItem(index);
   };
 

@@ -156,7 +156,6 @@ const Receipt = ({ items, setItems }) => {
   }, []);
 
   const classes = useStyles();
-  console.log(items);
   return (
     <div className={classes.root}>
       <ToolBar
