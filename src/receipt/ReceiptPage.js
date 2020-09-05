@@ -29,6 +29,7 @@ const ReceiptPage = (props) => {
     installationAddress: { label: "Emplazamiento Instalacion", value: "" },
     installationType: { label: "Tipo de instalacion", value: "" },
     mobile: { label: "Movil", value: "" },
+    email: { label: "Email", value: "" },
     azimut: { label: "Azimut", value: "" },
     clientNumber: { label: "Nº Cliente", value: "" },
     budgetNumber: { label: "Nº Presupuesto", value: "" },

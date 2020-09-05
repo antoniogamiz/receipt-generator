@@ -12,6 +12,7 @@ const replaceClientData = (text, data) => {
     .replace("!NIF!", data.clientData.nif.value)
     .replace("!PHONENUMBER!", data.clientData.mobile.value)
     .replace("!AZIMUT!", data.clientData.azimut.value)
+    .replace("!EMAIL!", data.clientData.email.value)
     .replace("!INSTALLATIONTYPE!", data.clientData.installationType.value)
     .replace("!INSTALLATIONADDRESS!", data.clientData.installationAddress.value)
     .replace("!CLIENTNUMBER!", data.clientData.clientNumber.value)
@@ -49,7 +50,10 @@ const openPDF = (pdfPath) => {
 export const generatePDF = async (pathFile, data) => {
   const directory = path.dirname(pathFile);
   const filename = path.basename(pathFile);
-  const templatePath = path.format({ dir: directory, base: "Presupuesto.tex" });
+  const templatePath = path.format({
+    dir: directory,
+    base: "client-budget.tex",
+  });
 
   let originalMasterTex = await fs.readFile(pathFile, "utf8");
   let originalTemplateTex = await fs.readFile(templatePath, "utf8");
