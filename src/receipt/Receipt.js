@@ -138,6 +138,13 @@ const Receipt = ({ items, setItems }) => {
     return newItems;
   };
 
+  const calculateTotalBenefits = (items) => {
+    return items.reduce(
+      (accumulator, item) => item.total - item.amount * item.provider_price,
+      0
+    );
+  };
+
   const onCheckChange = () => {
     setItems({
       ...items,
@@ -182,6 +189,7 @@ const Receipt = ({ items, setItems }) => {
           onChange={updateExpectedTotal}
           checked={items.expectedTotalEnabled}
           onCheckChange={onCheckChange}
+          benefits={calculateTotalBenefits(items.items)}
         />
       </Paper>
     </div>

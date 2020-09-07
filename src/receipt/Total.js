@@ -24,6 +24,7 @@ const Total = ({
   onChange,
   checked,
   onCheckChange,
+  benefits,
 }) => {
   const rows = [
     [
@@ -31,6 +32,7 @@ const Total = ({
       "IVA (21%)",
       "Gastos Generales",
       "Total",
+      "Beneficios",
       <div>
         <GreenCheckbox
           checked={checked}
@@ -46,6 +48,7 @@ const Total = ({
         subtotal * 0.21,
         subtotal * 0.13,
         subtotal * (1.0 + 0.21 + 0.13),
+        benefits,
       ].map((x) => addEuroSymbol(x)),
 
       <TextField

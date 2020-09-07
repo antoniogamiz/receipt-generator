@@ -61,7 +61,7 @@ const replaceBusinessData = (text, data) => {
           2
         )} \\% & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € & ${(
           item.total -
-          item.amount * item.pvp
+          item.amount * item.provider_price
         ).toFixed(2)} € \\\\`
     )
     .join("\n");
