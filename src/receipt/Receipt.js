@@ -74,7 +74,7 @@ const Receipt = ({ items, setItems }) => {
       description: item[3],
       amount: 1,
       provider_price: provider_price,
-      bi: 0,
+      bi: 6,
       pvp: provider_price,
       total: provider_price,
     };
@@ -139,10 +139,13 @@ const Receipt = ({ items, setItems }) => {
   };
 
   const calculateTotalBenefits = (items) => {
-    return items.reduce(
-      (accumulator, item) => item.total - item.amount * item.provider_price,
+    console.log(items);
+    const benefits = items.reduce(
+      (accumulator, item) =>
+        (item.amount * item.provider_price * item.bi) / 100 + accumulator,
       0
     );
+    return benefits;
   };
 
   const onCheckChange = () => {

@@ -40,12 +40,12 @@ const ReceiptItemListVisualizer = (props) => {
     `${item.provider_price.toFixed(2)} €`,
     <TextField
       onChange={biUpdate}
-      value={item.bi.toFixed(2)}
+      value={parseFloat(item.bi.toFixed(2)).toString()}
       inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
     `${item.pvp.toFixed(2)} €`,
     `${item.total.toFixed(2)} €`,
-    `${((item.pvp - item.provider_price) * item.amount).toFixed(2)} €`,
+    `${((item.amount * item.bi * item.provider_price) / 100).toFixed(2)} €`,
   ]);
 
   const rows = [
