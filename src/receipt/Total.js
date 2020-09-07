@@ -37,7 +37,7 @@ const Total = ({
           onChange={onCheckChange}
           name="checkedG"
         />
-        Total deseado
+        Subtotal deseado
       </div>,
     ],
     [
