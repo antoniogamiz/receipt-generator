@@ -40,8 +40,7 @@ const Receipt = ({ items, setItems }) => {
 
   const updateItem = (i, { amount, bi }) => {
     let newItems = [...items.items];
-    amount =
-      amount === undefined ? newItems[i].amount : parseInt(amount) || 1.0;
+    amount = amount === undefined ? newItems[i].amount : parseInt(amount) || 0;
     bi = bi === undefined ? newItems[i].bi : parseFloat(bi) || 0.0;
 
     let pvp = newItems[i].provider_price * (1 + bi / 100.0);
@@ -75,7 +74,7 @@ const Receipt = ({ items, setItems }) => {
       amount: 1,
       provider_price: provider_price,
       bi: 6,
-      pvp: provider_price,
+      pvp: provider_price * 1.06,
       total: provider_price,
     };
     const newItems = [...items.items, newItem];
