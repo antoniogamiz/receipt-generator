@@ -33,7 +33,7 @@ const replaceReceiptData = (text, data) => {
       (item, i) =>
         `${i} & ${item.brand} & ${item.description} & ${
           item.amount
-        } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} €\\\\`
+        } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € \\\\\\hline`
     )
     .join("\n");
   return text
@@ -48,36 +48,40 @@ const replaceBusinessData = (text, data) => {
   const subtotal = data.items
     .reduce((x, e) => x + parseFloat(e.total), 0)
     .toFixed(2);
-  const iva = (subtotal * 0.21).toFixed(2);
-  const generalExpenses = (subtotal * 0.13).toFixed(2);
-  const total = (subtotal * (1.0 + 0.21 + 0.13)).toFixed(2);
+  const iva = subtotal * 0.21;
+  const generalExpenses = subtotal * 0.13;
+  const total = subtotal * (1.0 + 0.21 + 0.13);
 
   const receiptTable = data.items
     .map(
-      (item, i) =>
+      (item) =>
         `${item.ref} & ${item.brand} & ${item.description} & ${
           item.amount
         } & ${item.provider_price.toFixed(2)} € & ${item.bi.toFixed(
           2
         )} \\% & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € & ${(
-          item.total -
-          item.amount * item.pvp
+          (item.amount * item.provider_price * item.bi) /
+          100
         ).toFixed(2)} € \\\\`
     )
     .join("\n");
   const totalBenefits = data.items.reduce(
-    (accumulator, item) => item.total - item.amount * item.provider_price,
+    (accumulator, item) =>
+      (item.amount * item.provider_price * item.bi) / 100 + accumulator,
     0
   );
   return text
-    .replace("!SUBTOTAL!", `${subtotal} € & ${totalBenefits} €`)
-    .replace("!IVA!", `${iva} €`)
+    .replace("!SUBTOTAL!", `${subtotal} € & ${totalBenefits.toFixed(2)} €`)
+    .replace("!IVA!", `${iva.toFixed(2)} €`)
     .replace(
       "!GENERALEXPENSES!",
-      `${generalExpenses} € & ${totalBenefits * 0.13} €`
+      `${generalExpenses.toFixed(2)} € & ${(totalBenefits * 0.13).toFixed(2)} €`
     )
-    .replace("!TOTAL1!", `${total} €`)
-    .replace("!TOTAL2!", `${total + totalBenefits * 0.13} €`)
+    .replace("!TOTAL1!", `${total.toFixed(2)} €`)
+    .replace(
+      "!TOTAL2!",
+      `${(totalBenefits + totalBenefits * 0.13).toFixed(2)} €`
+    )
     .replace("& & & & & & & & \\\\", receiptTable);
 };
 
@@ -106,7 +110,7 @@ export const generateBusinessReport = async (pathFile, data) => {
   console.log(`stderr: ${stderr}`);
   console.log(stdout);
 
-  fs.writeFile(reportPath, originalTemplateTex);
+  await fs.writeFile(reportPath, originalTemplateTex);
 
   openPDF(
     path.format({
@@ -144,9 +148,9 @@ export const generateClientReport = async (pathFile, data) => {
   let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${clientMaster}`;
   const { stdout, stderr } = await exec(command, { cwd: directory });
 
-  fs.writeFile(pathFile, originalMasterTex);
-  fs.writeFile(templatePath, originalTemplateTex);
-  fs.writeFile(reportPath, reportTemplateTex);
+  await fs.writeFile(pathFile, originalMasterTex);
+  await fs.writeFile(templatePath, originalTemplateTex);
+  await fs.writeFile(reportPath, reportTemplateTex);
 
   console.log(`stderr: ${stderr}`);
   console.log(stdout);
