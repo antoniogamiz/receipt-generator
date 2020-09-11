@@ -1,16 +1,14 @@
-const electron = require("electron");
-const app = electron.app;
-const path = require("path");
+import { app, BrowserWindow, ipcMain } from "electron";
+import * as path from "path";
+import * as url from "url";
 const isDev = require("electron-is-dev");
 const PDFWindow = require("electron-pdf-window");
 
-if (isDev) {
-  require("electron-reload");
-}
+// if (isDev) {
+//   require("electron-reload");
+// }
 
-const BrowserWindow = electron.BrowserWindow;
-const ipcMain = electron.ipcMain;
-let mainWindow;
+let mainWindow: Electron.BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -21,11 +19,17 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
+  if (process.env.NODE_ENV === "dev") {
+    mainWindow.loadURL(`http://localhost:3000`);
+  } else {
+    mainWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, "../index.html"),
+        protocol: "file:",
+        slashes: true,
+      })
+    );
+  }
 
   mainWindow.on("closed", () => {
     mainWindow = null;

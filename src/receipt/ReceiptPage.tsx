@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReceiptPage = (props) => {
+const ReceiptPage = () => {
   const [items, setItems] = useState({
     unmodifiedItems: [],
     items: [],

@@ -2,7 +2,7 @@
   "name": "receipt-generator",
   "description": "Receipt PDF generator",
   "version": "0.1.0",
-  "main": "public/electron.js",
+  "main": "./dist/main.js",
   "homepage": "./",
   "build": {
     "appId": "receipt-pdf",
@@ -34,6 +34,8 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
     "babel-preset-react": "^6.24.1",
     "electron-is-dev": "^1.2.0",
     "electron-pdf-window": "^1.0.12",
@@ -43,15 +45,9 @@
     "read-excel-file": "^4.0.7"
   },
   "scripts": {
-    "electron": "electron .",
-    "electron1": "cross-env NODE_ENV=dev nodemon --exec \"\"electron .\"\"",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "pack": "electron-packager .",
-    "dist": "npm run build && electron-builder --publish always --win -c.extraMetadata.main=build/electron.js",
-    "exe": "npm run build && electron-builder --win -c.extraMetadata.main=build/electron.js"
+    "dev:electron": "NODE_ENV=development webpack --config webpack.electron.config.js --mode development && electron .",
+    "dev:react": "NODE_ENV=development webpack-dev-server --config webpack.react.config.js --mode development",
+    "build": "npm run build && electron-builder --win -c.extraMetadata.main=build/electron.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -78,6 +74,7 @@
     "electron-builder": "^22.8.0",
     "electron-packager": "^15.1.0",
     "electron-reload": "^1.5.0",
+    "html-webpack-plugin": "^4.4.1",
     "nodemon": "^2.0.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",

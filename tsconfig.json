@@ -6,8 +6,11 @@
     "allowJs": true,
     "jsx": "react",
     "sourceMap": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true
+  },
+  "resolve": {
+    "extensions": [".js", ".jsx", ".ts", ".tsx"]
   }
 }

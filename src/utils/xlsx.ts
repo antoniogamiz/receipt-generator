@@ -1,7 +1,7 @@
 const xlsxFile = window.require("read-excel-file/node");
 
 class XLSX {
-  path;
+  path: String;
   pages = [];
   pagesName = [];
 

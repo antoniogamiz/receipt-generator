@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDom from "react-dom";
 
 import ReceiptPage from "./receipt/ReceiptPage";
 
@@ -10,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const App = (props) => {
+const App = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -19,4 +20,9 @@ const App = (props) => {
   );
 };
 
-export default App;
+ReactDom.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);

@@ -2,10 +2,11 @@ const path = require("path");
 
 module.exports = {
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    modules: ["src", "node_modules"],
+    extensions: [".tsx", ".ts", ".js", ".json"],
   },
   devtool: "source-map",
-  entry: "./electron/main.ts",
+  entry: "./public/electron.ts",
   target: "electron-main",
   module: {
     rules: [
@@ -19,7 +20,7 @@ module.exports = {
     ],
   },
   output: {
-    path: path.resolve(__dirname, "./build"),
+    path: path.resolve(__dirname, "./dist"),
     filename: "[name].js",
   },
 };
