@@ -4,6 +4,13 @@ const util = window.require("util");
 const exec = util.promisify(window.require("child_process").exec);
 const { ipcRenderer } = window.require("electron");
 
+const replacePDFs = (text, data) => {
+  const inputs = data.pdfFiles
+    .map((file) => `\\includepdf{${file}}`)
+    .join("\n");
+  return text.replace("!INPUTFILES!", inputs);
+};
+
 const replaceClientData = (text, data) => {
   return text
     .replace("!NAME!", data.clientData.name.value)
@@ -184,6 +191,7 @@ export const generateClientReport = async (pathFile, data) => {
   let reportTemplateTex = await fs.readFile(reportPath, "utf8");
 
   let newMasterTex = replaceClientData(originalMasterTex, data);
+  newMasterTex = replacePDFs(newMasterTex, data);
   let newTemplateTex = replaceClientData(originalTemplateTex, data);
   newTemplateTex = replaceReceiptData(newTemplateTex, data);
   let newReportTemplateTex = replaceClientData(reportTemplateTex, data);

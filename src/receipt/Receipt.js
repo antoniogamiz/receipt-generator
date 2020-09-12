@@ -139,7 +139,6 @@ const Receipt = ({ items, setItems }) => {
   };
 
   const calculateTotalBenefits = (items) => {
-    console.log(items);
     const benefits = items.reduce(
       (accumulator, item) =>
         (item.amount * item.provider_price * item.bi) / 100 + accumulator,
