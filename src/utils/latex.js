@@ -35,8 +35,8 @@ const replaceReceiptData = (text, data) => {
 
   const receiptTable = data.items
     .map(
-      (item, i) =>
-        `${i} & ${item.brand} & ${item.description} & ${
+      (item) =>
+        `${item.ref} & ${item.brand} & ${item.description} & ${
           item.amount
         } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € \\\\\\hline`
     )

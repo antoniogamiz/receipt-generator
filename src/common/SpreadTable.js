@@ -39,7 +39,10 @@ const SpreadTable = (props) => {
           </TableHead>
           <TableBody>
             {rows.map((row, i) => (
-              <TableRow onDoubleClick={props.onDoubleClick} key={i}>
+              <TableRow
+                onDoubleClick={(e) => props.onDoubleClick(e, i)}
+                key={i}
+              >
                 {row.map((cell) => (
                   <TableCell fontSize="small" align="center">
                     {typeof cell === "number" ? cell.toFixed(2) : cell}

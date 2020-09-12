@@ -6,41 +6,34 @@ import Table from "../common/SpreadTable";
 const ReceiptItemListVisualizer = (props) => {
   let items = props.items || [];
 
-  const amountUpdate = (e) => {
-    const index =
-      e.target.parentElement.parentElement.parentElement.parentElement
-        .firstChild.innerHTML;
+  const amountUpdate = (e, index) => {
     const amount = e.target.value;
     props.updateItem(parseInt(index), { amount: amount });
   };
 
-  const biUpdate = (e) => {
-    const index =
-      e.target.parentElement.parentElement.parentElement.parentElement
-        .firstChild.innerHTML;
+  const biUpdate = (e, index) => {
     const bi = e.target.value;
     props.updateItem(parseInt(index), { bi: bi });
   };
 
-  const deleteItem = (e) => {
-    const index = e.target.parentElement.firstChild.innerHTML;
+  const deleteItem = (e, index) => {
     props.deleteItem(index);
   };
 
   const rowItems = items.map((item, i) => [
-    i,
+    item.ref,
     item.brand,
     item.model,
     item.description,
     <TextField
-      onChange={amountUpdate}
+      onChange={(e) => amountUpdate(e, i)}
       value={item.amount}
       inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
     `${item.provider_price.toFixed(2)} €`,
     item.discount,
     <TextField
-      onChange={biUpdate}
+      onChange={(e) => biUpdate(e, i)}
       value={parseFloat(item.bi.toFixed(2)).toString()}
       inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
