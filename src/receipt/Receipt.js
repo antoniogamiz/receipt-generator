@@ -73,6 +73,7 @@ const Receipt = ({ items, setItems }) => {
       description: item[3],
       amount: 1,
       provider_price: provider_price,
+      discount: item[item.length - 3],
       bi: 6,
       pvp: provider_price * 1.06,
       total: provider_price * 1.06,
