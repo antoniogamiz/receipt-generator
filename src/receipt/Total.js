@@ -22,21 +22,30 @@ const Total = ({
   subtotal,
   expectedTotal,
   onChange,
-  checked,
-  onCheckChange,
+  isGeneralExpensesEnabled,
+  enableGeneralExpenses,
+  isTotalChangeEnabled,
+  enableTotalChange,
   benefits,
 }) => {
   const rows = [
     [
       "Subtotal",
       "IVA (21%)",
-      "Gastos Generales",
+      <div>
+        <GreenCheckbox
+          checked={isGeneralExpensesEnabled}
+          onChange={enableGeneralExpenses}
+          name="checkedG"
+        />
+        Gastos Generales
+      </div>,
       "Total",
       "Beneficios",
       <div>
         <GreenCheckbox
-          checked={checked}
-          onChange={onCheckChange}
+          checked={isTotalChangeEnabled}
+          onChange={enableTotalChange}
           name="checkedG"
         />
         Subtotal deseado
@@ -46,8 +55,10 @@ const Total = ({
       ...[
         subtotal,
         subtotal * 0.21,
-        subtotal * 0.13,
-        subtotal * (1.0 + 0.21 + 0.13),
+        isGeneralExpensesEnabled ? subtotal * 0.13 : 0,
+        isGeneralExpensesEnabled
+          ? subtotal * (1.0 + 0.21 + 0.13)
+          : subtotal * (1.0 + 0.21),
         benefits,
       ].map((x) => addEuroSymbol(x)),
 
