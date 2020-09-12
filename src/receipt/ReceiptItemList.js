@@ -38,6 +38,7 @@ const ReceiptItemListVisualizer = (props) => {
       inputProps={{ style: { textAlign: "center", width: "50px" } }}
     />,
     `${item.provider_price.toFixed(2)} €`,
+    item.discount,
     <TextField
       onChange={biUpdate}
       value={parseFloat(item.bi.toFixed(2)).toString()}
@@ -56,6 +57,7 @@ const ReceiptItemListVisualizer = (props) => {
       "Descripción",
       "Cantidad",
       "PP",
+      "Descuento (%)",
       "BI (%)",
       "PVP",
       "Total",
