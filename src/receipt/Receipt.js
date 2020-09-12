@@ -75,7 +75,7 @@ const Receipt = ({ items, setItems }) => {
       provider_price: provider_price,
       bi: 6,
       pvp: provider_price * 1.06,
-      total: provider_price,
+      total: provider_price * 1.06,
     };
     const newItems = [...items.items, newItem];
 

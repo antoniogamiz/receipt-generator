@@ -120,6 +120,37 @@ export const generateBusinessReport = async (pathFile, data) => {
   );
 };
 
+export const generateReceiptAlone = async (pathFile, data) => {
+  const directory = path.dirname(pathFile);
+
+  const reportPath = path.format({
+    dir: directory,
+    base: "receipt-alone.tex",
+  });
+
+  let originalTemplateTex = await fs.readFile(reportPath, "utf8");
+  const newTemplateTex = replaceReceiptData(
+    replaceClientData(originalTemplateTex, data),
+    data
+  );
+
+  await fs.writeFile(reportPath, newTemplateTex);
+
+  let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape receipt-alone.tex`;
+  const { stdout, stderr } = await exec(command, { cwd: directory });
+  console.log(`stderr: ${stderr}`);
+  console.log(stdout);
+
+  await fs.writeFile(reportPath, originalTemplateTex);
+
+  openPDF(
+    path.format({
+      dir: directory,
+      base: "receipt-alone.pdf",
+    })
+  );
+};
+
 export const generateClientReport = async (pathFile, data) => {
   const directory = path.dirname(pathFile);
   const clientMaster = path.basename(pathFile);
@@ -167,6 +198,7 @@ export const generatePDF = async (pathFile, data) => {
   try {
     await generateClientReport(pathFile, data);
     await generateBusinessReport(pathFile, data);
+    await generateReceiptAlone(pathFile, data);
   } catch (e) {
     alert(e.message);
   }
