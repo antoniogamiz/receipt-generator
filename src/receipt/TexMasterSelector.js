@@ -18,7 +18,7 @@ const TexMasterSelector = ({ onChange }) => {
   const [file, setFile] = useState("No tex file selected");
 
   const handleChange = (e) => {
-    let path = e.target.files[0].path;
+    const path = e.target.files[0].path;
     onChange(path);
     setFile(path);
   };

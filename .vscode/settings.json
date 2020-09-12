@@ -8,5 +8,8 @@
         "modelo",
         "n",
         "presupuesto"
+    ],
+    "cSpell.ignoreWords": [
+        "inputfiles"
     ]
 }
