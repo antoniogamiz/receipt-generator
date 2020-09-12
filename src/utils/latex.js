@@ -106,11 +106,13 @@ export const generateBusinessReport = async (pathFile, data) => {
   await fs.writeFile(reportPath, newTemplateTex);
 
   let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape business-master.tex`;
-  const { stdout, stderr } = await exec(command, { cwd: directory });
-  console.log(`stderr: ${stderr}`);
-  console.log(stdout);
-
-  await fs.writeFile(reportPath, originalTemplateTex);
+  try {
+    const { stdout, stderr } = await exec(command, { cwd: directory });
+    console.log(`stderr: ${stderr}`);
+    console.log(stdout);
+  } finally {
+    await fs.writeFile(reportPath, originalTemplateTex);
+  }
 
   openPDF(
     path.format({
@@ -137,11 +139,13 @@ export const generateReceiptAlone = async (pathFile, data) => {
   await fs.writeFile(reportPath, newTemplateTex);
 
   let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape receipt-alone.tex`;
-  const { stdout, stderr } = await exec(command, { cwd: directory });
-  console.log(`stderr: ${stderr}`);
-  console.log(stdout);
-
-  await fs.writeFile(reportPath, originalTemplateTex);
+  try {
+    const { stdout, stderr } = await exec(command, { cwd: directory });
+    console.log(`stderr: ${stderr}`);
+    console.log(stdout);
+  } finally {
+    await fs.writeFile(reportPath, originalTemplateTex);
+  }
 
   openPDF(
     path.format({
@@ -177,14 +181,15 @@ export const generateClientReport = async (pathFile, data) => {
   await fs.writeFile(reportPath, newReportTemplateTex);
 
   let command = `pdflatex -synctex=1 -interaction=nonstopmode --shell-escape ${clientMaster}`;
-  const { stdout, stderr } = await exec(command, { cwd: directory });
-
-  await fs.writeFile(pathFile, originalMasterTex);
-  await fs.writeFile(templatePath, originalTemplateTex);
-  await fs.writeFile(reportPath, reportTemplateTex);
-
-  console.log(`stderr: ${stderr}`);
-  console.log(stdout);
+  try {
+    const { stdout, stderr } = await exec(command, { cwd: directory });
+    console.log(`stderr: ${stderr}`);
+    console.log(stdout);
+  } finally {
+    await fs.writeFile(pathFile, originalMasterTex);
+    await fs.writeFile(templatePath, originalTemplateTex);
+    await fs.writeFile(reportPath, reportTemplateTex);
+  }
 
   openPDF(
     path.format({
