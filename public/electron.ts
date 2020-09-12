@@ -19,8 +19,8 @@ function createWindow() {
     },
   });
 
-  if (process.env.NODE_ENV === "dev") {
-    mainWindow.loadURL(`http://localhost:3000`);
+  if (process.env.NODE_ENV === "development") {
+    mainWindow.loadURL(`http://localhost:4000`);
   } else {
     mainWindow.loadURL(
       url.format({

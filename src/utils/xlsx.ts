@@ -2,11 +2,13 @@ const xlsxFile = window.require("read-excel-file/node");
 
 class XLSX {
   path: String;
-  pages = [];
-  pagesName = [];
+  pages: Array<(string | number)[]>;
+  pagesName: string[];
 
-  constructor(path) {
+  constructor(path: String) {
     this.path = path;
+    this.pages = [];
+    this.pagesName = [];
   }
 
   async load() {

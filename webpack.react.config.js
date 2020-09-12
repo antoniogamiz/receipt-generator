@@ -21,7 +21,7 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname, "../dist/renderer"),
+    contentBase: path.join(__dirname, "./dist/renderer"),
     historyApiFallback: true,
     compress: true,
     hot: true,
@@ -29,7 +29,7 @@ module.exports = {
     publicPath: "/",
   },
   output: {
-    path: path.resolve(__dirname, "../dist/renderer"),
+    path: path.resolve(__dirname, "./dist/renderer"),
     filename: "js/[name].js",
     publicPath: "./",
   },
