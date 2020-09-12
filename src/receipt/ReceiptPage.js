@@ -18,6 +18,7 @@ const ReceiptPage = (props) => {
     items: [],
     expectedTotal: 0,
     expectedTotalEnabled: false,
+    generalExpenses: true,
   });
 
   const [clientData, setClientData] = useState({
@@ -42,6 +43,7 @@ const ReceiptPage = (props) => {
       items: items.items,
       clientData: clientData,
       pdfFiles: pdfFiles,
+      generalExpenses: items.generalExpenses,
     });
   };
 

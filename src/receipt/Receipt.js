@@ -147,7 +147,7 @@ const Receipt = ({ items, setItems }) => {
     return benefits;
   };
 
-  const onCheckChange = () => {
+  const enableTotalChange = () => {
     setItems({
       ...items,
       items: applyExpectedTotal({
@@ -155,6 +155,13 @@ const Receipt = ({ items, setItems }) => {
         expectedTotalEnabled: !items.expectedTotalEnabled,
       }),
       expectedTotalEnabled: !items.expectedTotalEnabled,
+    });
+  };
+
+  const enableGeneralExpenses = () => {
+    setItems({
+      ...items,
+      generalExpenses: !items.generalExpenses,
     });
   };
 
@@ -189,8 +196,10 @@ const Receipt = ({ items, setItems }) => {
           subtotal={computeTotal(items.items)}
           expectedTotal={items.expectedTotal}
           onChange={updateExpectedTotal}
-          checked={items.expectedTotalEnabled}
-          onCheckChange={onCheckChange}
+          isTotalChangeEnabled={items.expectedTotalEnabled}
+          isGeneralExpensesEnabled={items.generalExpenses}
+          enableTotalChange={enableTotalChange}
+          enableGeneralExpenses={enableGeneralExpenses}
           benefits={calculateTotalBenefits(items.items)}
         />
       </Paper>

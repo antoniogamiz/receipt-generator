@@ -25,8 +25,13 @@ const replaceReceiptData = (text, data) => {
     .reduce((x, e) => x + parseFloat(e.total), 0)
     .toFixed(2);
   const iva = (subtotal * 0.21).toFixed(2);
-  const generalExpenses = (subtotal * 0.13).toFixed(2);
-  const total = (subtotal * (1.0 + 0.21 + 0.13)).toFixed(2);
+  const generalExpenses = (data.generalExpenses ? subtotal * 0.13 : 0).toFixed(
+    2
+  );
+  const total = (data.generalExpenses
+    ? subtotal * (1.0 + 0.21 + 0.13)
+    : subtotal * (1.0 + 0.21)
+  ).toFixed(2);
 
   const receiptTable = data.items
     .map(
@@ -49,8 +54,10 @@ const replaceBusinessData = (text, data) => {
     .reduce((x, e) => x + parseFloat(e.total), 0)
     .toFixed(2);
   const iva = subtotal * 0.21;
-  const generalExpenses = subtotal * 0.13;
-  const total = subtotal * (1.0 + 0.21 + 0.13);
+  const generalExpenses = data.generalExpenses ? subtotal * 0.13 : 0;
+  const total = data.generalExpenses
+    ? subtotal * (1.0 + 0.21 + 0.13)
+    : subtotal * (1.0 + 0.21);
 
   const receiptTable = data.items
     .map(
@@ -75,12 +82,17 @@ const replaceBusinessData = (text, data) => {
     .replace("!IVA!", `${iva.toFixed(2)} €`)
     .replace(
       "!GENERALEXPENSES!",
-      `${generalExpenses.toFixed(2)} € & ${(totalBenefits * 0.13).toFixed(2)} €`
+      `${generalExpenses.toFixed(2)} € & ${(
+        totalBenefits * (data.generalExpenses ? 0.13 : 0)
+      ).toFixed(2)} €`
     )
     .replace("!TOTAL1!", `${total.toFixed(2)} €`)
     .replace(
       "!TOTAL2!",
-      `${(totalBenefits + totalBenefits * 0.13).toFixed(2)} €`
+      `${(
+        totalBenefits +
+        totalBenefits * (data.generalExpenses ? 0.13 : 0)
+      ).toFixed(2)} €`
     )
     .replace("& & & & & & & & \\\\", receiptTable);
 };
