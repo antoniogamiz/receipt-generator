@@ -6,7 +6,7 @@ const { ipcRenderer } = window.require("electron");
 
 const replacePDFs = (text, data) => {
   const inputs = data.pdfFiles
-    .map((file) => `\\includepdf{${file}}`)
+    .map((file) => `\\includepdf[pages=-, landscape=true, angle=90]{${file}}`)
     .join("\n");
   return text.replace("!INPUTFILES!", inputs);
 };
