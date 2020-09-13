@@ -5,9 +5,13 @@ const exec = util.promisify(window.require("child_process").exec);
 const { ipcRenderer } = window.require("electron");
 
 const replacePDFs = (text, data) => {
-  const inputs = data.pdfFiles
-    .map((file) => `\\includepdf[pages=-, landscape=true, angle=90]{${file}}`)
-    .join("\n");
+  const inputs = data.pdfFiles.map(
+    (file) =>
+      `\\includepdf[pages=-, landscape=true, angle=90]{${file.replaceAll(
+        "\\",
+        "/"
+      )}}`
+  );
   return text.replace("!INPUTFILES!", inputs);
 };
 
