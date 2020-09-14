@@ -1,4 +1,11 @@
-import { Item, addItem, updateItem, deleteItem, DEFAULT_BI } from "./Receipt";
+import {
+  Item,
+  addItem,
+  updateItem,
+  deleteItem,
+  DEFAULT_BI,
+  applyExpectedTotal,
+} from "./Receipt";
 
 const genericItem: Item = {
   reference: "0-0000",
@@ -72,5 +79,20 @@ describe("Delete an item", () => {
     const input: Item[] = addItem([], genericRawItem);
     const output: Item[] = [];
     expect(deleteItem(input, "0-0000")).toEqual(output);
+  });
+});
+
+describe("Apply expected total", () => {
+  test("Non-zero expected total", () => {
+    const input: Item[] = addItem([], genericRawItem);
+    const output: Item[] = [
+      {
+        ...input[0],
+        bi: -33.33333333333333,
+        pvp: 100.00000000000001,
+        total: 100.00000000000001,
+      },
+    ];
+    expect(applyExpectedTotal(input, 100)).toEqual(output);
   });
 });

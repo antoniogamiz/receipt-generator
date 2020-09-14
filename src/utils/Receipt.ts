@@ -68,6 +68,18 @@ export const computeBenefits = (items: Item[]): number =>
   items.reduce((result, item) => result + item.total, 0);
 
 export const applyExpectedTotal = (
-  receipt: Receipt,
+  items: Item[],
   expectedTotal: number
-): Receipt => {};
+): Item[] => {
+  const total: number = computeBenefits(items);
+  const lambda: number = (expectedTotal || total) / total;
+
+  const newItems: Item[] = items.map((item) => {
+    const newBI = (lambda * (1 + item.bi / 100) - 1) * 100;
+    const pvp = item.provider_price * (1 + newBI / 100.0);
+    const total = pvp * item.amount;
+    return { ...item, bi: newBI, pvp: pvp, total: total };
+  });
+
+  return newItems;
+};
