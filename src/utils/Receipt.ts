@@ -38,8 +38,27 @@ export const addItem = (items: Item[], item: any[]): Item[] => {
 export const updateItem = (
   items: Item[],
   reference: string,
-  { bi, amount }: { bi: string; amount: bigint }
-): Item => {};
+  { bi, amount }: { bi?: number; amount?: number }
+): Item[] => {
+  const index = items.findIndex((i) => i.reference === reference);
+  const item = items[index];
+  amount = amount ?? item.amount;
+  bi = bi ?? item.bi;
+
+  let newItems: Item[] = [...items];
+  const pvp: number = item.provider_price * (1 + bi / 100.0);
+  const total: number = pvp * amount;
+
+  newItems[index] = {
+    ...item,
+    amount: amount,
+    bi: bi,
+    pvp: pvp,
+    total: total,
+  };
+
+  return newItems;
+};
 
 export const deleteItem = (items: Item[], reference: string): Item[] => {};
 

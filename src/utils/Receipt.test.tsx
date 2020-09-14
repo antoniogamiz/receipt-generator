@@ -1,4 +1,4 @@
-import { Item, addItem, DEFAULT_BI } from "./Receipt";
+import { Item, addItem, DEFAULT_BI, updateItem } from "./Receipt";
 
 const genericItem: Item = {
   reference: "0-0000",
@@ -9,12 +9,12 @@ const genericItem: Item = {
   provider_price: 0,
   discount: 0,
   bi: 0,
-  pvp: 0,
-  total: 0,
+  pvp: 150,
+  total: 150,
 };
 
 const genericRawItem: any[] = [
-  "reference",
+  "0-0000",
   "brand",
   "model",
   "description",
@@ -30,7 +30,7 @@ describe("Add an item", () => {
     const output: Item[] = [
       genericItem,
       {
-        reference: "reference",
+        reference: "0-0000",
         brand: "brand",
         model: "model",
         description: "description",
@@ -47,6 +47,24 @@ describe("Add an item", () => {
   });
 });
 
-test("Update an item", () => {});
+describe("Update an item", () => {
+  test("Update BI", () => {
+    const input: Item[] = addItem([], genericRawItem);
+    const output: Item[] = [{ ...input[0], bi: 0, pvp: 150, total: 150 }];
+    expect(updateItem(input, "0-0000", { bi: 0 })).toEqual(output);
+  });
+
+  test("Update BI", () => {
+    const input: Item[] = addItem([], genericRawItem);
+    const output: Item[] = [{ ...input[0], bi: 0, pvp: 150, total: 150 }];
+    expect(updateItem(input, "0-0000", { bi: 0 })).toEqual(output);
+  });
+
+  test("Update nothing", () => {
+    const input: Item[] = addItem([], genericRawItem);
+    const output: Item[] = input;
+    expect(updateItem(input, "0-0000", {})).toEqual(output);
+  });
+});
 
 test("Delete an item", () => {});
