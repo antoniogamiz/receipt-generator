@@ -60,7 +60,9 @@ export const updateItem = (
   return newItems;
 };
 
-export const deleteItem = (items: Item[], reference: string): Item[] => {};
+export const deleteItem = (items: Item[], reference: string): Item[] => {
+  return items.filter((item) => item.reference !== reference);
+};
 
 export const applyExpectedTotal = (
   receipt: Receipt,

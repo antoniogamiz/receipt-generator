@@ -1,4 +1,4 @@
-import { Item, addItem, DEFAULT_BI, updateItem } from "./Receipt";
+import { Item, addItem, updateItem, deleteItem, DEFAULT_BI } from "./Receipt";
 
 const genericItem: Item = {
   reference: "0-0000",
@@ -67,4 +67,10 @@ describe("Update an item", () => {
   });
 });
 
-test("Delete an item", () => {});
+describe("Delete an item", () => {
+  test("Delete an item", () => {
+    const input: Item[] = addItem([], genericRawItem);
+    const output: Item[] = [];
+    expect(deleteItem(input, "0-0000")).toEqual(output);
+  });
+});
