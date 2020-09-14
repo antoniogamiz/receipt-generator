@@ -64,9 +64,10 @@ export const deleteItem = (items: Item[], reference: string): Item[] => {
   return items.filter((item) => item.reference !== reference);
 };
 
+export const computeBenefits = (items: Item[]): number =>
+  items.reduce((result, item) => result + item.total, 0);
+
 export const applyExpectedTotal = (
   receipt: Receipt,
   expectedTotal: number
 ): Receipt => {};
-
-export const computeBenefits = (receipt: Receipt): number => {};
