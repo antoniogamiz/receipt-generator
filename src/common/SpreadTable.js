@@ -40,7 +40,7 @@ const SpreadTable = (props) => {
           <TableBody>
             {rows.map((row, i) => (
               <TableRow
-                onDoubleClick={(e) => props.onDoubleClick(e, i)}
+                onDoubleClick={(e) => props.onDoubleClick(e, row[0])}
                 key={i}
               >
                 {row.map((cell) => (

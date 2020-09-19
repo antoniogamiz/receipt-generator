@@ -5,7 +5,7 @@ import Table from "../common/SpreadTable";
 const SpreadSheetVisualizer = (props) => {
   const onDoubleClick = (e) => {
     const ref = e.target.parentElement.firstChild.innerHTML;
-    props.addItem(ref);
+    props.onAddItem(ref);
   };
 
   return (

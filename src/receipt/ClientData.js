@@ -15,20 +15,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputField = ({ label, onChange, id }) => {
-  const classes = useStyles();
-
-  const handleChange = (event) => {
-    const text = event.target.value;
-    onChange(id, text);
-  };
-
+const NameInput = ({ onChange, ...props }) => {
+  const field = "name";
   return (
     <TextField
-      className={classes.input}
-      label={label}
-      id="standard-password-input"
-      onChange={handleChange}
+      label={"Name"}
+      key={field}
+      value={field}
+      onChange={(e) => onChange(e, field)}
+      style={{ margin: "2px", width: "80%" }}
     />
   );
 };
@@ -36,21 +31,15 @@ const InputField = ({ label, onChange, id }) => {
 const ClientData = (props) => {
   const classes = useStyles();
 
-  const handleFieldChange = (fieldId, value) => {
+  const handleFieldChange = (e, fieldId) => {
+    const value = e.target.value;
     let tmp = { ...props.fields[fieldId], value: value };
-    props.onUpdate({ ...props.fields, [fieldId]: tmp });
+    props.onClientDataChange({ ...props.fields, [fieldId]: tmp });
   };
 
   const fields = Object.keys(props.fields).map((field) => (
     <Grid item xs={6} align="center">
-      <InputField
-        key={field}
-        id={field}
-        onChange={handleFieldChange}
-        value={props.fields[field].value}
-        label={props.fields[field].label}
-        className={classes.input}
-      />
+      <NameInput className={classes.input} onChange={handleFieldChange} />
     </Grid>
   ));
   return (

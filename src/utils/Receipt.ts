@@ -16,9 +16,15 @@ export type Item = {
 
 export type Receipt = {
   items: Item[];
+  expectedTotal: number;
+  expectedTotalEnabled: boolean;
+  generalExpenses: number;
+  generalExpensesEnabled: boolean;
 };
 
 export const addItem = (items: Item[], item: any[]): Item[] => {
+  if (items.find((e) => e.reference === item[0])) return items;
+
   const provider_price: number = parseFloat(item[item.length - 1]);
   const newItem = {
     reference: item[0],
@@ -64,14 +70,36 @@ export const deleteItem = (items: Item[], reference: string): Item[] => {
   return items.filter((item) => item.reference !== reference);
 };
 
-export const computeBenefits = (items: Item[]): number =>
+// this needs to be renamed to computeTotal
+// create new function called computeBenefits, really compute them
+export const computeSubtotal = (items: Item[]): number =>
   items.reduce((result, item) => result + item.total, 0);
+
+export const computeSubtotalVAT = (items: Item[]): number =>
+  computeSubtotal(items) * (DEFAULT_IVA / 100);
+
+export const computeGeneralExpenses = (receipt: Receipt): number =>
+  receipt.generalExpensesEnabled
+    ? computeSubtotalVAT(receipt.items) * (receipt.generalExpenses / 100)
+    : 0;
+
+export const computeTotal = (receipt: Receipt): number =>
+  computeSubtotal(receipt.items) +
+  computeSubtotalVAT(receipt.items) +
+  computeGeneralExpenses(receipt);
+
+export const computeBenefits = (items: Item[]): number =>
+  items.reduce(
+    (accumulator, item) =>
+      (item.amount * item.provider_price * item.bi) / 100 + accumulator,
+    0
+  );
 
 export const applyExpectedTotal = (
   items: Item[],
   expectedTotal: number
 ): Item[] => {
-  const total: number = computeBenefits(items);
+  const total: number = computeSubtotal(items);
   const lambda: number = (expectedTotal || total) / total;
 
   const newItems: Item[] = items.map((item) => {

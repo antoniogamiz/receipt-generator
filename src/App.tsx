@@ -1,6 +1,6 @@
 import React from "react";
 
-import ReceiptPage from "./receipt/ReceiptPage";
+import AppContainer from "./receipt/containers/AppContainer";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -10,11 +10,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const App = (props) => {
+const App = (props: {}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <ReceiptPage />
+      <AppContainer />
     </div>
   );
 };

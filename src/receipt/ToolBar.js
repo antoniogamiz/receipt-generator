@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const ToolBar = (props) => {
   const updateFile = (e) => {
     const path = e.target.files[0].path;
-    props.updateFile(path);
+    props.onXlsxChange(path);
   };
   const classes = useStyles();
 
@@ -26,10 +26,7 @@ const ToolBar = (props) => {
       <Paper elevation={5}>
         <Grid container spacing={3}>
           <Grid item xs={6} align="center">
-            <TextField
-              label="Search by reference"
-              onChange={props.updateSearch}
-            />
+            <TextField label="Search by reference" onChange={props.onSearch} />
           </Grid>
           <Grid item xs={6} align="center">
             <Button
