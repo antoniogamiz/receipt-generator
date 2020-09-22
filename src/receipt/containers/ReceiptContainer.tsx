@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 
 import Tab from "@material-ui/core/Tab";
@@ -9,7 +8,7 @@ import ToolBar from "../ToolBar";
 import SpreadSheet from "../SpreadSheet";
 import ReceiptItemList from "../ReceiptItemList";
 import Total from "../Total";
-import { Item, Receipt } from "../../utils/Receipt";
+import { Receipt } from "../../utils/Receipt";
 
 const SpreadTabs = (props: any) => {
   if (!props.names) return <div></div>;

@@ -15,14 +15,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NameInput = ({ onChange, ...props }) => {
-  const field = "name";
+const NameInput = ({
+  name,
+  value,
+  displayName,
+  onChange,
+  error,
+  helperText,
+}) => {
   return (
     <TextField
       label={"Name"}
-      key={field}
-      value={field}
-      onChange={(e) => onChange(e, field)}
+      key={name}
+      error={error}
+      helperText={helperText}
+      value={value}
+      onChange={(e) => onChange(e, name)}
       style={{ margin: "2px", width: "80%" }}
     />
   );
@@ -30,12 +38,6 @@ const NameInput = ({ onChange, ...props }) => {
 
 const ClientData = (props) => {
   const classes = useStyles();
-
-  const handleFieldChange = (e, fieldId) => {
-    const value = e.target.value;
-    let tmp = { ...props.fields[fieldId], value: value };
-    props.onClientDataChange({ ...props.fields, [fieldId]: tmp });
-  };
 
   const fields = Object.keys(props.fields).map((field) => (
     <Grid item xs={6} align="center">
