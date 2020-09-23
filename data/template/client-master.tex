@@ -1,0 +1,171 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NORMALMENTE NO ES NECESARIO HACER 
+%%% CAMBIOS EN ESTA PARTE DEL DOCUMENTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%:Clase del documento
+\documentclass[fontsize=11pt, Myfinal=true, oneside, numbers=noenddot]{report}
+%Minion=true, English=true, Myfinal=true
+
+%:Paquete de estilos propuesto
+\usepackage[Myfinal=true]{libroETSI}
+
+%:Paquete específico para cargar tikz (y sus librerías) y pgfplots
+\usepackage{dtsc-creafig}
+
+%:Paquete para notaciones específicas
+\usepackage{notacion}
+
+%:Paquete para incorporar aspectos concretos de la edición
+\usepackage{edicionPFC}
+
+% Paquete para incluir epígrafes en los capítulos
+\usepackage{epigraph}
+
+
+
+
+%:Para modificar fácilmente la fuente del texto.
+\makeatletter
+\ifdtsc@Minion % Queremos utilizar la fuente Minion y lo hemos declarado al principio
+	\ifluatex
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.01,
+		]{Minion Pro}
+   		% En este caso conviene modificar ligeramente el tamaño de las fuentes matemáticas
+		\DeclareMathSizes{10}{10.5}{7.35}{5.25}
+		\DeclareMathSizes{10.95}{11.55}{8.08}{5.77}
+		\DeclareMathSizes{12}{12.6}{8.82}{6.3}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Adobe Garamond Pro}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Palatino LT Std}
+	\fi
+\else
+	\ifluatex
+		% Para utilizar la fuente Times New Roman, o alguna otra que se tenga instalada
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.0,
+		]{Times New Roman}
+	\else
+		\usepackage{tgtermes} 	%clone of Times
+		%\usepackage[default]{droidserif}
+		%\usepackage{anttor} 	
+	\fi
+\fi
+\makeatother
+
+% Formato A4
+\geometry
+{paperheight=297mm,%
+paperwidth=210mm,%
+top=25mm,%
+headsep=8.5mm,%
+includefoot, 
+textheight=240mm, 
+textwidth=150mm, 
+bindingoffset=0mm, 
+}
+%asymmetric----elimina el efecto twoside
+%twoside---formato de márgenes a doble cara, estilo libro
+
+\usepackage[a4,center]{crop}%para poner las cruces de esquina de página, poner la opción cross
+
+%:Esquema de numeración por defecto
+\setenumerate[1]{label=\normalfont\bfseries{\arabic*.}, leftmargin=*, labelindent=\parindent}
+\setenumerate[2]{label=\normalfont\bfseries{\alph*}), leftmargin=*}
+\setenumerate[3]{label=\normalfont\bfseries{\roman*.}, leftmargin=*}
+\setlist{itemsep=.1em}
+\setlength{\parindent}{1.0 em}
+
+\setcounter{tocdepth}{4}						% El nivel hasta el que se muestra el índice 
+
+%\usepackage[framemethod=tikz]{mdframed}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+%Campo de firma
+\newcommand{\firmado}[2]{%
+\vspace{0.5cm}
+  \parbox{\textwidth}{
+    \centering #2 \today\\
+   % \vspace{4cm}
+   
+   \begin{center} 
+\includegraphics[scale=1,angle=90]{figuras/03-SELLO TESA}
+\end{center}    
+    \parbox{9cm}{
+      \centering
+      \rule{6cm}{1pt}\\
+       #1 
+    }
+    \hfill
+  }
+}
+
+%Para incluir pdf
+\usepackage{pdfpages}
+
+%Para poner la marca de agua
+\usepackage{eso-pic}
+\usepackage{transparent}
+
+\newcommand\BackgroundPic{
+\put(0,-50){
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+{\transparent{0.35}\includegraphics[width=13.5cm,height=10cm]{figuras/01-LOGO}}%
+\vfill
+}}}
+
+\usepackage{numprint}
+%\AddToShipoutPicture*{\BackgroundPic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% A PARTIR DE AQUÍ HAY QUE EDITAR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%:Empieza el documento
+
+\begin{document}
+%\selectlanguage{ngerman}
+%PORTADA
+%ver edicionPFC.sty para modificaciones
+
+%:Para crear la portada y la portada interior (pagina titular)
+\nombretrabajo{PROPUESTA Y PRESUPUESTO DE \\INSTALACIÓN FV CONECTADA A RED}
+\cliente{Datos del cliente:}
+\nombreCliente{!NAME!}
+\direccionCliente{!ADDRESS!}
+\CP{!CP!, !CITY!}
+\CIFNIF{!NIF!}
+\emplazamientoInstalacion{!INSTALLATIONADDRESS!}
+\Ncliente{!CLIENTNUMBER!}
+\Npresupuesto{!BUDGETNUMBER!}
+\direccionEmpresa{C/Derechos Humanos, Nº 8, Churriana de la Vega, Granada}
+\telefono{(+34) 958176105}
+\direccionWeb{www.tesaenergia.com}
+\email{tecnico@tesaenergia.com}
+
+
+\hypersetup
+	{
+ 	linkcolor=black, %Tocar para poner color en enlaces
+	pdfauthor={\elnombreCliente},
+	pdftitle={\nombretrabajo,\elcliente}, 
+	pdfkeywords={Latex, edición, formato de texto}	
+	}
+
+\portadaPFC{} %logo de la Universidad y logo del departamento, si lo hubiera. Para cambiar el pie de página con los logos, debe editarse el fichero ediciónPFC.sty
+
+%Fin Portada
+\pagestyle{esitscCD}
+\include{MemoriaDescriptiva}
+\include{client-budget}
+
+!INPUTFILES!
+
+
+\end{document}
