@@ -4,66 +4,58 @@ import TextField from "@material-ui/core/TextField";
 import { Grid, GridSize } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 
-export type Entry = {
-  name: string;
-  value: string | number;
+export type Entry<T> = {
   displayName: string;
+  value?: T;
+  // validate?:
 };
 
-export type ClientData = Entry[];
+const keys = ["name", "address", "cp", "nif", "installationAddress", "installationType", "mobile", "email", "azimut", "clientNumber", "budgetNumber"] as const;
+export type ClientDataKeys = typeof keys[number];
 
-const InputWrapper = (props: {
-  name: string;
-  value: string | number;
-  displayName: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
-}) => {
-  return (
-    <TextField
-      label={props.displayName}
-      key={props.name}
-      value={props.value}
-      onChange={props.onChange}
-      style={{ margin: "2px", width: "80%" }}
-    />
-  );
-};
+export type ClientData = {
+  name: Entry<string>
+  address: Entry<string>
+  cp: Entry<number>
+  nif: Entry<string>
+  installationAddress: Entry<string>
+  installationType: Entry<string>
+  mobile: Entry<number>
+  email: Entry<string>
+  azimut: Entry<string>
+  clientNumber: Entry<string>
+  budgetNumber: Entry<string>
+}
 
 type ClientDataProps = {
-  onClientDataChange: (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
+  onChange: (field: keyof ClientData, value: string | number) => void;
   entries: ClientData;
 };
 
 class ClientDataContainer extends React.Component<ClientDataProps> {
   render() {
-    const fields = this.props.entries.map((entry: Entry) => {
-      const colWidth: GridSize = 6;
+    const colWidth: GridSize = 6;
+    const inputs = keys.map((key, i) => {
       return (
-        <Grid item xs={colWidth} alignItems="center">
-          <InputWrapper
-            name={entry.name}
-            displayName={entry.displayName}
-            value={entry.value}
-            onChange={this.props.onClientDataChange}
-          />
+        <Grid key={i} item xs={colWidth}>
+          <TextField
+            label={this.props.entries[key].displayName}
+            value={this.props.entries[key].value || ""}
+            onChange={(e) => this.props.onChange(key, e.currentTarget.value)}
+            style={{ margin: "2px", width: "80%" }} />
         </Grid>
-      );
+      )
     });
 
     return (
-      <div style={{ margin: "5px" }}>
+      <div>
         <Paper elevation={5}>
-          <Grid container spacing={1}>
-            {fields}
+          <Grid container spacing={1} alignItems="center">
+            {inputs}
           </Grid>
         </Paper>
       </div>
     );
   }
 }
-
 export default ClientDataContainer;

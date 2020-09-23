@@ -32,8 +32,8 @@ const SpreadTable = (props) => {
         >
           <TableHead>
             <TableRow>
-              {header.map((text) => (
-                <TableCell align="center">{text}</TableCell>
+              {header.map((text, i) => (
+                <TableCell key={i} align="center">{text}</TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -43,8 +43,8 @@ const SpreadTable = (props) => {
                 onDoubleClick={(e) => props.onDoubleClick(e, row[0])}
                 key={i}
               >
-                {row.map((cell) => (
-                  <TableCell fontSize="small" align="center">
+                {row.map((cell, i) => (
+                  <TableCell key={i} fontSize="small" align="center">
                     {typeof cell === "number" ? cell.toFixed(2) : cell}
                   </TableCell>
                 ))}

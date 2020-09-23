@@ -4,7 +4,7 @@ import LatexGenerator from "../LatexGenerator";
 import XLSX from "../../utils/xlsx";
 import { generatePDF } from "../../utils/latex";
 import ReceiptContainer from "./ReceiptContainer";
-import { Receipt, addItem, updateItem, deleteItem } from "../../utils/Receipt";
+import { Receipt, addItem, updateItem, deleteItem, DEFAULT_BI } from "../../utils/Receipt";
 import ClientDataContainer, { ClientData, Entry } from "./ClientDataContainer";
 
 interface state {
@@ -24,50 +24,36 @@ class AppContainer extends React.Component<{}, state> {
         items: [],
         expectedTotal: 0,
         expectedTotalEnabled: false,
-        generalExpenses: 13,
+        generalExpenses: DEFAULT_BI,
         generalExpensesEnabled: true,
       },
-      clientData: [
-        { name: "name", displayName: "Nombre", value: "" },
-        {
-          name: "address",
+      clientData: {
+        name: { displayName: "Nombre" },
+        address: {
           displayName: "Dirección",
-          value: "",
         },
-        { name: "cp", displayName: "CP", value: "" },
-        { name: "nif", displayName: "NIF", value: "" },
-        {
-          name: "installationAddress",
+        cp: { displayName: "CP" },
+        nif: { displayName: "NIF" },
+        installationAddress: {
           displayName: "Dir. Instalación",
-          value: "",
         },
-        {
-          name: "installationType",
+        installationType: {
           displayName: "Tipo Instalación",
-          value: "",
         },
-        {
-          name: "mobile",
+        mobile: {
           displayName: "Móvil",
-          value: "",
         },
-        { name: "nif", displayName: "Email", value: "" },
-        {
-          name: "azimut",
+        email: { displayName: "Email" },
+        azimut: {
           displayName: "Azimut",
-          value: "",
         },
-        {
-          name: "clientNumber",
+        clientNumber: {
           displayName: "Nº Cliente",
-          value: "",
         },
-        {
-          name: "budgetNumber",
+        budgetNumber: {
           displayName: "Nº Presupuesto",
-          value: "",
         },
-      ],
+      },
       pdfFiles: [],
       texFile: "main.tex",
     };
@@ -127,15 +113,12 @@ class AppContainer extends React.Component<{}, state> {
   };
 
   onClientDataChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    field: keyof ClientData,
+    value: string | number
   ) => {
-    const value = e.target.value;
-    const field: string = e.target.name;
-    const entry: Entry | undefined = this.state.clientData.find(
-      (i) => i.name === field
-    );
+    const entry: Entry<string | number> = { ...this.state.clientData[field], value: value };
     this.setState({
-      clientData: { ...this.state.clientData, [field]: value },
+      clientData: { ...this.state.clientData, [field]: entry },
     });
   };
 
@@ -146,7 +129,6 @@ class AppContainer extends React.Component<{}, state> {
       pdfFiles: this.state.pdfFiles,
     });
   };
-
   render() {
     return (
       <div style={{ margin: "5px" }}>
@@ -162,7 +144,7 @@ class AppContainer extends React.Component<{}, state> {
           enableGeneralExpenses={this.enableGeneralExpenses}
         />
         <ClientDataContainer
-          onClientDataChange={this.onClientDataChange}
+          onChange={this.onClientDataChange}
           entries={this.state.clientData}
         />
         {/* <LatexGenerator
