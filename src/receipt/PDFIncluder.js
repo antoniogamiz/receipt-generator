@@ -1,25 +1,21 @@
-import React, { useState } from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import React from "react";
+import { Button, Paper, makeStyles } from "@material-ui/core";
 const path = window.require("path");
 
 const useStyles = makeStyles((theme) => ({
   p: {
     padding: theme.spacing(1),
+    textAlign: "center",
     color: theme.palette.text.secondary,
   },
 }));
 
-const PDFIncluder = ({ onChange }) => {
+const PDFIncluder = ({ files, onChange }) => {
   const classes = useStyles();
-  const [files, setFiles] = useState(["No PDF files selected"]);
 
   const handleChange = (e) => {
     let paths = Array.from(e.target.files).map((f) => f.path);
     onChange(paths);
-    setFiles(paths);
   };
   return (
     <div>

@@ -1,7 +1,6 @@
 import React from "react";
+import { TextField, Checkbox } from "@material-ui/core";
 
-import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
 import Table from "../common/SpreadTable";
 
 import {
@@ -71,7 +70,7 @@ const Total = ({
   return (
     <div id="total_table" style={{ marginTop: "20px" }}>
       {/* hotfix, change onDoubleClick */}
-      <Table maxHeight="100px" rows={rows} onDoubleClick={() => {}} />
+      <Table maxHeight="100px" rows={rows} onDoubleClick={() => { }} />
     </div>
   );
 };

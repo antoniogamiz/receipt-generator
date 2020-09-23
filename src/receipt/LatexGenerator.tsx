@@ -1,10 +1,6 @@
 import React from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { Button, Paper, Grid, makeStyles } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
 
 import PDFIncluder from "./PDFIncluder";
 import TexMasterSelector from "./TexMasterSelector";
@@ -18,7 +14,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LatexGenerator = ({ updatePDFFiles, updateTexFile, compile }) => {
+type LatexGeneratorProps = {
+  compile: () => void;
+  pdfFiles: string[];
+  onPdfFilesChange: (files: string[]) => void;
+  texFile: string;
+  onTexFileChange: (file: string) => void;
+}
+
+const LatexGenerator = (props: LatexGeneratorProps) => {
   const classes = useStyles();
 
   return (
@@ -28,21 +32,20 @@ const LatexGenerator = ({ updatePDFFiles, updateTexFile, compile }) => {
           container
           spacing={0}
           alignItems="center"
-          align="center"
           justify="center"
         >
           <Grid item xs={4}>
-            <PDFIncluder onChange={updatePDFFiles} />
+            <PDFIncluder files={props.pdfFiles} onChange={props.onPdfFilesChange} />
           </Grid>
           <Grid item xs={4}>
             <TexMasterSelector
-              className={classes.child}
-              onChange={updateTexFile}
+              file={props.texFile}
+              onChange={props.onTexFileChange}
             />
           </Grid>
           <Grid item xs={4}>
             <Button
-              onClick={compile}
+              onClick={props.compile}
               variant="contained"
               color="primary"
               size="small"

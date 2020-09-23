@@ -1,8 +1,6 @@
 import React from "react";
 
-import TextField from "@material-ui/core/TextField";
-import { Grid, GridSize } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import { Grid, Paper, TextField } from "@material-ui/core";
 
 export type Entry<T> = {
   displayName: string;
@@ -34,10 +32,9 @@ type ClientDataProps = {
 
 class ClientDataContainer extends React.Component<ClientDataProps> {
   render() {
-    const colWidth: GridSize = 6;
     const inputs = keys.map((key, i) => {
       return (
-        <Grid key={i} item xs={colWidth}>
+        <Grid key={i} item xs={6}>
           <TextField
             label={this.props.entries[key].displayName}
             value={this.props.entries[key].value || ""}

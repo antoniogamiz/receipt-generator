@@ -55,7 +55,7 @@ class AppContainer extends React.Component<{}, state> {
         },
       },
       pdfFiles: [],
-      texFile: "main.tex",
+      texFile: "",
     };
   }
 
@@ -122,6 +122,10 @@ class AppContainer extends React.Component<{}, state> {
     });
   };
 
+  onPdfFilesChange = (files: string[]) => this.setState({ pdfFiles: files })
+
+  onTexFileChange = (file: string) => this.setState({ texFile: file })
+
   compile = () => {
     generatePDF(this.state.texFile, {
       receipt: this.state.receipt,
@@ -147,11 +151,13 @@ class AppContainer extends React.Component<{}, state> {
           onChange={this.onClientDataChange}
           entries={this.state.clientData}
         />
-        {/* <LatexGenerator
-          compile={compile}
-          updatePDFFiles={setPdfFiles}
-          updateTexFile={setTexFile}
-        /> */}
+        <LatexGenerator
+          compile={this.compile}
+          pdfFiles={this.state.pdfFiles}
+          onPdfFilesChange={this.onPdfFilesChange}
+          texFile={this.state.texFile}
+          onTexFileChange={this.onTexFileChange}
+        />
       </div>
     );
   }
