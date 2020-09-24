@@ -5,7 +5,7 @@ import ToolBar from "../ToolBar";
 import SpreadSheet from "../SpreadSheet";
 import ReceiptItemList from "../ReceiptItemList";
 import Total from "../Total";
-import { Receipt } from "../../utils/Receipt";
+import { applyExpectedTotal, Receipt } from "../../utils/Receipt";
 
 const SpreadTabs = (props: any) => {
   if (!props.names) return <div></div>;
@@ -77,7 +77,7 @@ class ReceiptContainer extends React.Component<props, state> {
             onAddItem={this.props.onAddItem}
           />
           <ReceiptItemList
-            items={this.props.receipt.items}
+            items={applyExpectedTotal(this.props.receipt)}
             onUpdateItem={this.props.onUpdateItem}
             onDeleteItem={this.props.onDeleteItem}
           />

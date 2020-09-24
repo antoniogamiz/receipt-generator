@@ -1,28 +1,32 @@
+import { ReceiptCreatorState } from "../receipt/containers/AppContainer"
+import { computeBenefitsOfItem, computeDetailedTotal } from "./Receipt";
+
 const path = window.require("path");
 const { promises: fs } = window.require("fs");
 const util = window.require("util");
 const exec = util.promisify(window.require("child_process").exec);
 const { ipcRenderer } = window.require("electron");
 
-const replacePDFs = (text, data) => {
+
+const replacePDFs = (text: string, data: ReceiptCreatorState) => {
   const inputs = data.pdfFiles.map(
     (file) =>
       `\\includepdf[pages=-, landscape=true, angle=90]{${file.replaceAll(
         "\\",
         "/"
       )}}`
-  );
+  ).join("");
   return text.replace("!INPUTFILES!", inputs);
 };
 
-const replaceClientData = (text, data) => {
+const replaceClientData = (text: string, data: ReceiptCreatorState) => {
   return text
     .replace("!NAME!", data.clientData.name.value)
     .replace("!ADDRESS!", data.clientData.address.value)
-    .replace("!CP!", data.clientData.cp.value)
+    .replace("!CP!", data.clientData.cp.value.toString())
     .replace("!CITY!", data.clientData.city.value)
     .replace("!NIF!", data.clientData.nif.value)
-    .replace("!PHONENUMBER!", data.clientData.mobile.value)
+    .replace("!PHONENUMBER!", data.clientData.mobile.value.toString())
     .replace("!AZIMUT!", data.clientData.azimut.value)
     .replace("!EMAIL!", data.clientData.email.value)
     .replace("!INSTALLATIONTYPE!", data.clientData.installationType.value)
@@ -31,88 +35,58 @@ const replaceClientData = (text, data) => {
     .replace("!BUDGETNUMBER!", data.clientData.budgetNumber.value);
 };
 
-const replaceReceiptData = (text, data) => {
-  const subtotal = data.items
-    .reduce((x, e) => x + parseFloat(e.total), 0)
-    .toFixed(2);
-  const iva = (subtotal * 0.21).toFixed(2);
-  const generalExpenses = (data.generalExpenses ? subtotal * 0.13 : 0).toFixed(
-    2
-  );
-  const total = (data.generalExpenses
-    ? subtotal * (1.0 + 0.21 + 0.13)
-    : subtotal * (1.0 + 0.21)
-  ).toFixed(2);
-
-  const receiptTable = data.items
+const replaceReceiptData = (text: string, data: ReceiptCreatorState) => {
+  const detailedTotal = computeDetailedTotal(data.receipt);
+  const receiptTable = data.receipt.items
     .map(
       (item) =>
-        `${item.ref} & ${item.brand} & ${item.description} & ${
-          item.amount
+        `${item.reference} & ${item.brand} & ${item.description} & ${item.amount
         } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € \\\\\\hline`
     )
     .join("\n");
   return text
-    .replace("!SUBTOTAL!", `${subtotal} €`)
-    .replace("!IVA!", `${iva} €`)
-    .replace("!GENERALEXPENSES!", `${generalExpenses} €`)
-    .replace("!TOTAL!", `${total} €`)
+    .replace("!SUBTOTAL!", `${detailedTotal.subtotal.toFixed(2)} €`)
+    .replace("!IVA!", `${detailedTotal.vat.toFixed(2)} €`)
+    .replace("!GENERALEXPENSES!", `${detailedTotal.generalExpenses.toFixed(2)} €`)
+    .replace("!TOTAL!", `${detailedTotal.total.toFixed(2)} €`)
     .replace("& & & & & \\\\", receiptTable);
 };
 
-const replaceBusinessData = (text, data) => {
-  const subtotal = data.items
-    .reduce((x, e) => x + parseFloat(e.total), 0)
-    .toFixed(2);
-  const iva = subtotal * 0.21;
-  const generalExpenses = data.generalExpenses ? subtotal * 0.13 : 0;
-  const total = data.generalExpenses
-    ? subtotal * (1.0 + 0.21 + 0.13)
-    : subtotal * (1.0 + 0.21);
-
-  const receiptTable = data.items
+const replaceBusinessData = (text: string, data: ReceiptCreatorState) => {
+  const detailedTotal = computeDetailedTotal(data.receipt);
+  const receiptTable = data.receipt.items
     .map(
       (item) =>
-        `${item.ref} & ${item.brand} & ${item.description} & ${
-          item.amount
+        `${item.reference} & ${item.brand} & ${item.description} & ${item.amount
         } & ${item.provider_price.toFixed(2)} € & ${item.bi.toFixed(
           2
         )} \\% & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € & ${(
-          (item.amount * item.provider_price * item.bi) /
-          100
+          computeBenefitsOfItem(item)
         ).toFixed(2)} € \\\\`
     )
     .join("\n");
-  const totalBenefits = data.items.reduce(
-    (accumulator, item) =>
-      (item.amount * item.provider_price * item.bi) / 100 + accumulator,
-    0
-  );
   return text
-    .replace("!SUBTOTAL!", `${subtotal} € & ${totalBenefits.toFixed(2)} €`)
-    .replace("!IVA!", `${iva.toFixed(2)} €`)
+    .replace("!SUBTOTAL!", `${detailedTotal.subtotal.toFixed(2)} € & ${detailedTotal.benefits.toFixed(2)} €`)
+    .replace("!IVA!", `${detailedTotal.vat.toFixed(2)} €`)
     .replace(
       "!GENERALEXPENSES!",
-      `${generalExpenses.toFixed(2)} € & ${(
-        totalBenefits * (data.generalExpenses ? 0.13 : 0)
-      ).toFixed(2)} €`
+      `${detailedTotal.generalExpenses.toFixed(2)} € & ${detailedTotal.benefitsFromGeneralExpenses.toFixed(2)} €`
     )
-    .replace("!TOTAL1!", `${total.toFixed(2)} €`)
+    .replace("!TOTAL1!", `${detailedTotal.total.toFixed(2)} €`)
     .replace(
       "!TOTAL2!",
       `${(
-        totalBenefits +
-        totalBenefits * (data.generalExpenses ? 0.13 : 0)
+        detailedTotal.benefits + detailedTotal.benefitsFromGeneralExpenses
       ).toFixed(2)} €`
     )
     .replace("& & & & & & & & \\\\", receiptTable);
 };
 
-const openPDF = (pdfPath) => {
+const openPDF = (pdfPath: string) => {
   ipcRenderer.send("show-pdf", pdfPath);
 };
 
-export const generateBusinessReport = async (pathFile, data) => {
+export const generateBusinessReport = async (pathFile: string, data: ReceiptCreatorState) => {
   const directory = path.dirname(pathFile);
 
   const reportPath = path.format({
@@ -145,7 +119,7 @@ export const generateBusinessReport = async (pathFile, data) => {
   );
 };
 
-export const generateReceiptAlone = async (pathFile, data) => {
+export const generateReceiptAlone = async (pathFile: string, data: ReceiptCreatorState) => {
   const directory = path.dirname(pathFile);
 
   const reportPath = path.format({
@@ -178,7 +152,7 @@ export const generateReceiptAlone = async (pathFile, data) => {
   );
 };
 
-export const generateClientReport = async (pathFile, data) => {
+export const generateClientReport = async (pathFile: string, data: ReceiptCreatorState) => {
   const directory = path.dirname(pathFile);
   const clientMaster = path.basename(pathFile);
   const templatePath = path.format({
@@ -223,7 +197,7 @@ export const generateClientReport = async (pathFile, data) => {
   );
 };
 
-export const generatePDF = async (pathFile, data) => {
+export const generatePDF = async (pathFile: string, data: ReceiptCreatorState) => {
   try {
     await generateClientReport(pathFile, data);
     await generateBusinessReport(pathFile, data);

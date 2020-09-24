@@ -4,7 +4,7 @@ import { Grid, Paper, TextField } from "@material-ui/core";
 
 export type Entry<T> = {
   displayName: string;
-  value?: T;
+  value: T;
   // validate?:
 };
 
@@ -14,6 +14,7 @@ export type ClientDataKeys = typeof keys[number];
 export type ClientData = {
   name: Entry<string>
   address: Entry<string>
+  city: Entry<string>
   cp: Entry<number>
   nif: Entry<string>
   installationAddress: Entry<string>

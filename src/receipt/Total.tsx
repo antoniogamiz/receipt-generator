@@ -6,7 +6,7 @@ import Table from "../common/SpreadTable";
 import {
   Receipt,
   computeSubtotal,
-  computeSubtotalVAT,
+  computeVAT,
   computeGeneralExpenses,
   computeTotal,
   computeBenefits,
@@ -28,7 +28,7 @@ const Total = ({
   enableGeneralExpenses,
 }: TotalProps) => {
   const subtotal = computeSubtotal(receipt.items);
-  const vat = computeSubtotalVAT(receipt.items);
+  const vat = computeVAT(receipt.items);
   const gg = computeGeneralExpenses(receipt);
   const total = computeTotal(receipt);
   const benefits = computeBenefits(receipt.items);

@@ -7,7 +7,7 @@ import ReceiptContainer from "./ReceiptContainer";
 import { Receipt, addItem, updateItem, deleteItem, DEFAULT_BI } from "../../utils/Receipt";
 import ClientDataContainer, { ClientData, Entry } from "./ClientDataContainer";
 
-interface state {
+export interface ReceiptCreatorState {
   receipt: Receipt;
   clientData: ClientData;
   pdfFiles: string[];
@@ -15,7 +15,7 @@ interface state {
   xlsx: any;
 }
 
-class AppContainer extends React.Component<{}, state> {
+class AppContainer extends React.Component<{}, ReceiptCreatorState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -28,30 +28,33 @@ class AppContainer extends React.Component<{}, state> {
         generalExpensesEnabled: true,
       },
       clientData: {
-        name: { displayName: "Nombre" },
+        name: { displayName: "Nombre", value: "" },
         address: {
-          displayName: "Dirección",
+          displayName: "Dirección", value: ""
         },
-        cp: { displayName: "CP" },
-        nif: { displayName: "NIF" },
+        city: {
+          displayName: "Ciudad", value: ""
+        },
+        cp: { displayName: "CP", value: 0 },
+        nif: { displayName: "NIF", value: "" },
         installationAddress: {
-          displayName: "Dir. Instalación",
+          displayName: "Dir. Instalación", value: ""
         },
         installationType: {
-          displayName: "Tipo Instalación",
+          displayName: "Tipo Instalación", value: ""
         },
         mobile: {
-          displayName: "Móvil",
+          displayName: "Móvil", value: 0
         },
-        email: { displayName: "Email" },
+        email: { displayName: "Email", value: "" },
         azimut: {
-          displayName: "Azimut",
+          displayName: "Azimut", value: ""
         },
         clientNumber: {
-          displayName: "Nº Cliente",
+          displayName: "Nº Cliente", value: ""
         },
         budgetNumber: {
-          displayName: "Nº Presupuesto",
+          displayName: "Nº Presupuesto", value: ""
         },
       },
       pdfFiles: [],
@@ -126,13 +129,8 @@ class AppContainer extends React.Component<{}, state> {
 
   onTexFileChange = (file: string) => this.setState({ texFile: file })
 
-  compile = () => {
-    generatePDF(this.state.texFile, {
-      receipt: this.state.receipt,
-      clientData: this.state.clientData,
-      pdfFiles: this.state.pdfFiles,
-    });
-  };
+  compile = () => generatePDF(this.state.texFile, this.state)
+
   render() {
     return (
       <div style={{ margin: "5px" }}>

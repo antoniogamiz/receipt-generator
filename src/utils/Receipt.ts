@@ -70,39 +70,36 @@ export const deleteItem = (items: Item[], reference: string): Item[] => {
   return items.filter((item) => item.reference !== reference);
 };
 
-// this needs to be renamed to computeTotal
-// create new function called computeBenefits, really compute them
 export const computeSubtotal = (items: Item[]): number =>
   items.reduce((result, item) => result + item.total, 0);
 
-export const computeSubtotalVAT = (items: Item[]): number =>
+export const computeVAT = (items: Item[]): number =>
   computeSubtotal(items) * (DEFAULT_IVA / 100);
 
 export const computeGeneralExpenses = (receipt: Receipt): number =>
   receipt.generalExpensesEnabled
-    ? computeSubtotalVAT(receipt.items) * (receipt.generalExpenses / 100)
+    ? computeVAT(receipt.items) * (receipt.generalExpenses / 100)
     : 0;
 
 export const computeTotal = (receipt: Receipt): number =>
   computeSubtotal(receipt.items) +
-  computeSubtotalVAT(receipt.items) +
+  computeVAT(receipt.items) +
   computeGeneralExpenses(receipt);
 
+export const computeBenefitsOfItem = (item: Item): number => item.amount * item.provider_price * item.bi / 100
+
 export const computeBenefits = (items: Item[]): number =>
-  items.reduce(
-    (accumulator, item) =>
-      (item.amount * item.provider_price * item.bi) / 100 + accumulator,
-    0
-  );
+  items.reduce((accumulator, item) => computeBenefitsOfItem(item) + accumulator, 0);
 
 export const applyExpectedTotal = (
-  items: Item[],
-  expectedTotal: number
+  receipt: Receipt
 ): Item[] => {
-  const total: number = computeSubtotal(items);
-  const lambda: number = (expectedTotal || total) / total;
+  if (!receipt.expectedTotalEnabled) return receipt.items;
 
-  const newItems: Item[] = items.map((item) => {
+  const total: number = computeSubtotal(receipt.items);
+  const lambda: number = (receipt.expectedTotal || total) / total;
+
+  const newItems: Item[] = receipt.items.map((item) => {
     const newBI = (lambda * (1 + item.bi / 100) - 1) * 100;
     const pvp = item.provider_price * (1 + newBI / 100.0);
     const total = pvp * item.amount;
@@ -111,3 +108,25 @@ export const applyExpectedTotal = (
 
   return newItems;
 };
+
+export type DetailedTotal = {
+  subtotal: number;
+  vat: number;
+  generalExpenses: number;
+  benefits: number;
+  benefitsFromGeneralExpenses: number;
+  total: number;
+}
+
+export const computeDetailedTotal = (receipt: Receipt): DetailedTotal => {
+  const newReceipt = { ...receipt };
+  newReceipt.items = applyExpectedTotal(receipt);
+  return {
+    subtotal: computeSubtotal(newReceipt.items),
+    vat: computeVAT(newReceipt.items),
+    generalExpenses: computeGeneralExpenses(newReceipt),
+    benefits: computeBenefits(newReceipt.items),
+    benefitsFromGeneralExpenses: computeBenefits(newReceipt.items) * (newReceipt.generalExpenses) / 100,
+    total: computeTotal(newReceipt)
+  }
+}
