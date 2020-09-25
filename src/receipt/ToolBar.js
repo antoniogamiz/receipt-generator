@@ -22,6 +22,11 @@ const ToolBar = (props) => {
     props.onXlsxChange(path);
   };
 
+  const loadJsonFile = (e) => {
+    const path = e.target.files[0].path;
+    props.loadJsonFile(path);
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -57,7 +62,7 @@ const ToolBar = (props) => {
               <input
                 type="file"
                 style={{ display: "none" }}
-                onChange={props.updateJsonFile}
+                onChange={loadJsonFile}
                 accept=".json"
               />
             </Button>

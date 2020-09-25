@@ -33,7 +33,9 @@ const SpreadTable = (props) => {
           <TableHead>
             <TableRow>
               {header.map((text, i) => (
-                <TableCell key={i} align="center">{text}</TableCell>
+                <TableCell key={i} align="center">
+                  {text}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>

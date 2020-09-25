@@ -14,6 +14,7 @@ import {
 import ClientDataContainer, { ClientData, Entry } from "./ClientDataContainer";
 
 const FileSaver = window.require("file-saver");
+const fs = window.require("fs").promises;
 
 export interface ReceiptCreatorState {
   receipt: Receipt;
@@ -80,11 +81,9 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
 
   onXlsxChange = (path: string) => {
     const newXLSX = new XLSX(path);
-    console.log("hey");
     newXLSX
       .load()
       .then(() => {
-        console.log("dd");
         this.setState({ xlsx: newXLSX });
       })
       .catch((e) => alert(e));
@@ -168,10 +167,45 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
       generalExpensesEnabled: this.state.receipt.generalExpensesEnabled,
     };
     const blob = new Blob([JSON.stringify(object, null, 2)], {
-      type: "application/json;charset=utf-8",
+      type: "text/plain",
     });
 
     FileSaver.saveAs(blob, "receipt-data.json");
+  };
+
+  setStateFromJSON = (obj: any) => {
+    let items: any[] = [];
+    for (let i = 0; i < obj.items.length; i++) {
+      const newItem = this.state.xlsx.searchByReference(
+        obj.items[i].reference
+      )[1];
+      items = addItem(items, newItem);
+      items = updateItem(items, obj.items[i].reference, {
+        bi: obj.items[i].bi,
+        amount: obj.items[i].amount,
+      });
+    }
+
+    this.setState({
+      clientData: {
+        ...obj.clientData,
+      },
+      receipt: {
+        ...this.state.receipt,
+        items: items,
+        expectedTotal: obj.expectedTotal,
+        expectedTotalEnabled: obj.expectedTotalEnabled,
+        generalExpenses: obj.generalExpenses,
+        generalExpensesEnabled: obj.generalExpensesEnabled,
+      },
+    });
+  };
+
+  loadJsonFile = (path: string) => {
+    fs.readFile(path, "utf8").then((str: string) => {
+      if (this.state.xlsx.path) this.setStateFromJSON(JSON.parse(str));
+      else alert("Catálogo no seleccionado");
+    });
   };
 
   render() {
@@ -188,6 +222,7 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
           enableTotalExpected={this.enableTotalExpected}
           enableGeneralExpenses={this.enableGeneralExpenses}
           saveJsonFile={this.saveJsonFile}
+          loadJsonFile={this.loadJsonFile}
         />
         <ClientDataContainer
           onChange={this.onClientDataChange}

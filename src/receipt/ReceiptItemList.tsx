@@ -32,6 +32,13 @@ const ReceiptItemList = (props: props) => {
     props.onUpdateItem(reference, { bi: bi });
   };
 
+  const onDeleteItem = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    reference: string
+  ) => {
+    props.onDeleteItem(reference);
+  };
+
   const rowItems = items.map((item) => [
     item.reference,
     item.brand,
@@ -73,7 +80,7 @@ const ReceiptItemList = (props: props) => {
 
   return (
     <div style={{ marginTop: "20px" }}>
-      <Table maxHeight="250px" rows={rows} onDoubleClick={props.onDeleteItem} />
+      <Table maxHeight="250px" rows={rows} onDoubleClick={onDeleteItem} />
     </div>
   );
 };
