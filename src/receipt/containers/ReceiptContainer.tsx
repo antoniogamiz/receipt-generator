@@ -35,6 +35,7 @@ interface props {
   enableTotalExpected: () => void;
   enableGeneralExpenses: () => void;
   onXlsxChange: (path: string) => void;
+  saveJsonFile: (path: string) => void;
 }
 
 class ReceiptContainer extends React.Component<props, state> {
@@ -66,6 +67,7 @@ class ReceiptContainer extends React.Component<props, state> {
         <ToolBar
           onXlsxChange={this.props.onXlsxChange}
           onSearch={this.onSearch}
+          saveJsonFile={this.props.saveJsonFile}
         />
         <Paper elevation={2} style={{ marginTop: "20px" }}>
           <SpreadTabs

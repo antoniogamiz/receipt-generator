@@ -13,6 +13,8 @@ import {
 } from "../../utils/Receipt";
 import ClientDataContainer, { ClientData, Entry } from "./ClientDataContainer";
 
+const FileSaver = window.require("file-saver");
+
 export interface ReceiptCreatorState {
   receipt: Receipt;
   clientData: ClientData;
@@ -152,6 +154,26 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
 
   compile = () => generatePDF(this.state.texFile, this.state);
 
+  saveJsonFile = () => {
+    const object = {
+      clientData: { ...this.state.clientData },
+      items: this.state.receipt.items.map((item) => ({
+        reference: item.reference,
+        bi: item.bi,
+        amount: item.amount,
+      })),
+      expectedTotal: this.state.receipt.expectedTotal,
+      expectedTotalEnabled: this.state.receipt.expectedTotalEnabled,
+      generalExpenses: this.state.receipt.generalExpenses,
+      generalExpensesEnabled: this.state.receipt.generalExpensesEnabled,
+    };
+    const blob = new Blob([JSON.stringify(object, null, 2)], {
+      type: "application/json;charset=utf-8",
+    });
+
+    FileSaver.saveAs(blob, "receipt-data.json");
+  };
+
   render() {
     return (
       <div style={{ margin: "5px" }}>
@@ -165,6 +187,7 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
           onExpectedTotalChange={this.onExpectedTotalChange}
           enableTotalExpected={this.enableTotalExpected}
           enableGeneralExpenses={this.enableGeneralExpenses}
+          saveJsonFile={this.saveJsonFile}
         />
         <ClientDataContainer
           onChange={this.onClientDataChange}

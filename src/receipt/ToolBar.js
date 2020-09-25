@@ -22,16 +22,6 @@ const ToolBar = (props) => {
     props.onXlsxChange(path);
   };
 
-  const updateJsonFile = (e) => {
-    const path = e.target.files[0].path;
-    props.updateJsonFile(path);
-  };
-
-  const saveJsonFile = (e) => {
-    const path = e.target.files[0].path;
-    props.saveJsonFile(path);
-  };
-
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -67,7 +57,7 @@ const ToolBar = (props) => {
               <input
                 type="file"
                 style={{ display: "none" }}
-                onChange={updateJsonFile}
+                onChange={props.updateJsonFile}
                 accept=".json"
               />
             </Button>
@@ -77,15 +67,10 @@ const ToolBar = (props) => {
               variant="contained"
               component="label"
               color="primary"
+              onClick={props.saveJsonFile}
               startIcon={<GetAppIcon />}
             >
               Guardar
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={saveJsonFile}
-                accept=".json"
-              />
             </Button>
           </Grid>
         </Grid>
