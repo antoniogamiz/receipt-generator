@@ -1,0 +1,135 @@
+%:Elementos personales relacionados con la edición de un Proyecto Fin de grado
+%:Para poner la marca de agua
+\ifdraft{
+\makeatletter		
+\SetBgContents{} 
+\SetBgOpacity{1} 
+\SetBgScale{1} 
+\AddEverypageHook{%
+\ifthenelse{\isodd{\thepage}}
+{\SetBgAngle{0}%
+\SetBgHshift{0} 
+\SetBgColor{gray!75}%
+ \SetBgContents{\copyright\ \afiliafont \elnombreCliente\;\afiliafont \eldepartamento\;\afiliafont\launiversidad\; \today  \; \timestring}}%
+{\SetBgAngle{0}
+\SetBgColor{gray!75}%
+\SetBgHshift{0} 
+   \SetBgContents{\afiliafont \timestring\; \today \; \afiliafont \eldepartamento\;\afiliafont\launiversidad \; \copyright\ \afiliafont \elnombreCliente}}%
+\bg@material} 
+\makeatother
+}{}
+%:Fin de la marca de agua
+
+\newif\iftitle
+
+
+%:Definición de las variables
+\def\nombretrabajo#1{\def\elnombretrabajo{ #1}}
+\def\cliente#1{\def\elcliente{ #1}}
+\def\nombreCliente#1{\def\elnombreCliente{#1}}
+\def\direccionCliente#1{\def\ladireccionCliente{ #1}}
+\def\CP#1{\def\elCP{ #1}}
+\def\CIFNIF#1{\def\elCIFNIF{ #1}}
+\def\emplazamientoInstalacion#1{\def\elemplazamientoInstalacion{ #1}}
+\def\Ncliente#1{\def\elNcliente{ #1}}
+\def\Npresupuesto#1{\def\elNpresupuesto{ #1}}
+\def\direccionEmpresa#1{\def\ladireccionEmpresa{ #1}}
+\def\telefono#1{\def\eltelefono{ #1}}
+\def\direccionWeb#1{\def\ladireccionWeb{ #1}}
+\def\email#1{\def\elemail{ #1}}
+
+
+\nombretrabajo{}
+\cliente{}
+\nombreCliente{}
+\direccionCliente{}
+\CP{}
+\CIFNIF{}
+\emplazamientoInstalacion{}
+\Ncliente{}
+\Npresupuesto{}
+\direccionEmpresa{}
+\telefono{}
+\direccionWeb{}
+\email{}
+
+%:Construcción de la cubierta
+\makeatletter
+\def\portadaPFC{%
+	\pgfdeclarelayer{background}
+	\pgfdeclarelayer{foreground}
+	\pgfsetlayers{background,main,foreground}
+	
+	\pagestyle{empty}
+	\definecolor{etsi}{RGB}{40,117,145}
+	%{RGB}{40,117,145}
+    %{RGB}{175,207,72}
+	\begin{tikzpicture}[remember picture,overlay]
+		\begin{pgfonlayer}{background}
+		\filldraw[etsi] (current page.north west) rectangle ([xshift=35mm]current page.south west);
+		\filldraw[etsi] ([yshift=-205mm] current page.north west) rectangle ([yshift=-261mm]current page.north east);
+
+		\node[anchor=north west, %anchor is upper left corner of the graphic
+		      	xshift=-1.2mm, %shifting around
+		      	yshift=-203.5mm] 
+		     	at (current page.north west) %left upper corner of the page
+		     	{\includegraphics[width=35mm, height=5.6cm]{figuras/02-PLACA}}; 
+		     	
+      \end{pgfonlayer}
+ 
+		 \node[opacity=0.5,inner sep=0pt,anchor=center,yshift=60mm,xshift=10mm] at (current page.center){\includegraphics[width=13.5cm,height=10cm]{figuras/01-LOGO}};      
+
+
+		% Todo el texto 
+		\begin{pgfonlayer}{foreground}
+
+		\node[align=left, anchor=north west] 
+			at ([xshift=40mm,yshift=-25mm]current page.north west) (name) 
+			{\begin{minipage}{\textwidth}
+			\begin{spacing}{1.8}
+				{\huge \bfseries\elnombretrabajo}\\
+            \end{spacing}			
+			\end{minipage}};
+  
+		\node[align=left, anchor=north west] 
+			at ([xshift=40mm,yshift=-112mm]current page.north west) (name) 
+			{\begin{minipage}{0.85\textwidth}
+				\setstretch{2}
+				{\huge \underline{\elcliente}}
+			\end{minipage}};
+  
+		\node[align=left, anchor=north west] 
+			at ([xshift=40mm,yshift=-125mm]current page.north west) (name) 
+			{\begin{minipage}{0.90\textwidth}
+				\setstretch{2}
+				{\Large \textbf{Nombre:} \elnombreCliente}\newline
+				{\Large \textbf{Dirección:} \ladireccionCliente} \newline
+				{\Large \textbf{C.P/Ciudad:} \elCP}\newline
+				{\Large \textbf{CIF/NIF:} \elCIFNIF}\newline
+				{\Large \textbf{Emplazamiento instalación:} \elemplazamientoInstalacion} \newline
+				{\Large \textbf{Nº de cliente:} \elNcliente}\newline
+				{\Large \textbf{Nº de presupuesto:} \elNpresupuesto}\newline
+				{\Large \textbf{Fecha de oferta:} \today}\newline
+			\end{minipage}};
+  
+		\node[align=center, anchor=north west] 
+			at ([xshift=55mm,yshift=-215mm]current page.north west) (name) 
+  			{\begin{minipage}{0.80\textwidth}
+  			\begin{spacing}{1.4}
+				\centering
+				\color[rgb]{1,1,1}%{0.801,0.58627,0.47647}
+				\normalfont\fontsize{5mm}{5mm}\selectfont
+				\ladireccionEmpresa\\
+				\eltelefono\\
+				\ladireccionWeb\\
+				\elemail\\
+				\normalfont\fontsize{5mm}{5mm}\selectfont \today	
+				\end{spacing}	
+			\end{minipage}};
+
+		\end{pgfonlayer}
+	\end{tikzpicture}
+	
+\thispagestyle{empty}\mbox{}
+	%\clearpage
+}

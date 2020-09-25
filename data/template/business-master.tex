@@ -1,0 +1,138 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NORMALMENTE NO ES NECESARIO HACER 
+%%% CAMBIOS EN ESTA PARTE DEL DOCUMENTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%:Clase del documento
+\documentclass[fontsize=10pt, Myfinal=true, oneside, numbers=noenddot]{report}
+%Minion=true, English=true, Myfinal=true
+
+%:Paquete de estilos propuesto
+\usepackage[Myfinal=true]{libroETSI}
+
+%:Paquete específico para cargar tikz (y sus librerías) y pgfplots
+\usepackage{dtsc-creafig}
+
+%:Paquete para notaciones específicas
+\usepackage{notacion}
+
+% Paquete para incluir epígrafes en los capítulos
+\usepackage{epigraph}
+
+
+
+
+%:Para modificar fácilmente la fuente del texto.
+\makeatletter
+\ifdtsc@Minion % Queremos utilizar la fuente Minion y lo hemos declarado al principio
+	\ifluatex
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.01,
+		]{Minion Pro}
+   		% En este caso conviene modificar ligeramente el tamaño de las fuentes matemáticas
+		\DeclareMathSizes{10}{10.5}{7.35}{5.25}
+		\DeclareMathSizes{10.95}{11.55}{8.08}{5.77}
+		\DeclareMathSizes{12}{12.6}{8.82}{6.3}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Adobe Garamond Pro}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Palatino LT Std}
+	\fi
+\else
+	\ifluatex
+		% Para utilizar la fuente Times New Roman, o alguna otra que se tenga instalada
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.0,
+		]{Times New Roman}
+	\else
+		\usepackage{tgtermes} 	%clone of Times
+		%\usepackage[default]{droidserif}
+		%\usepackage{anttor} 	
+	\fi
+\fi
+\makeatother
+
+% Formato A4
+\geometry
+{paperheight=297mm,%
+paperwidth=210mm,%
+top=25mm,%
+headsep=8.5mm,%
+includefoot, 
+textheight=240mm, 
+textwidth=150mm, 
+bindingoffset=0mm, 
+}
+%asymmetric----elimina el efecto twoside
+%twoside---formato de márgenes a doble cara, estilo libro
+
+\usepackage[a4,center]{crop}%para poner las cruces de esquina de página, poner la opción cross
+
+%:Esquema de numeración por defecto
+\setenumerate[1]{label=\normalfont\bfseries{\arabic*.}, leftmargin=*, labelindent=\parindent}
+\setenumerate[2]{label=\normalfont\bfseries{\alph*}), leftmargin=*}
+\setenumerate[3]{label=\normalfont\bfseries{\roman*.}, leftmargin=*}
+\setlist{itemsep=.1em}
+\setlength{\parindent}{1.0 em}
+
+\setcounter{tocdepth}{4}						% El nivel hasta el que se muestra el índice 
+
+%\usepackage[framemethod=tikz]{mdframed}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+%Campo de firma
+\newcommand{\firmado}[2]{%
+\vspace{0.5cm}
+  \parbox{\textwidth}{
+    \centering #2 \today\\
+   % \vspace{4cm}
+   
+   \begin{center} 
+\includegraphics[scale=1, angle=90]{figuras/03-SELLO TESA}
+\end{center}    
+    \parbox{9cm}{
+      \centering
+      \rule{6cm}{1pt}\\
+       #1 
+    }
+    \hfill
+  }
+}
+
+%Para incluir pdf
+\usepackage{pdfpages}
+
+%Para poner la marca de agua
+\usepackage{eso-pic}
+\usepackage{transparent}
+
+\newcommand\BackgroundPic{
+\put(0,0){
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+{\transparent{0.35}\includegraphics[width=13.5cm,height=10cm, angle=90]{figuras/01-LOGO}}%
+\vfill
+}}}
+
+
+%\usepackage{lscape} %Sirve para poner en horizontal el texto si vamos a imprimir el PDF
+\usepackage{pdflscape} % Pone en horizontal la hoja si no la queremos imprimir
+%\AddToShipoutPicture*{\BackgroundPic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% A PARTIR DE AQUÍ HAY QUE EDITAR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%:Empieza el documento
+
+\begin{document}
+
+
+\begin{landscape}
+\include{business-budget}
+\end{landscape}
+
+\end{document}

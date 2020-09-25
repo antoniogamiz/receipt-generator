@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import React from "react";
+import { Button, Paper, makeStyles } from "@material-ui/core";
 const path = window.require("path");
 
 const useStyles = makeStyles((theme) => ({
@@ -13,14 +10,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TexMasterSelector = ({ onChange }) => {
+const TexMasterSelector = ({ file, onChange }) => {
   const classes = useStyles();
-  const [file, setFile] = useState("No tex file selected");
 
   const handleChange = (e) => {
     const path = e.target.files[0].path;
     onChange(path);
-    setFile(path);
   };
 
   return (
@@ -31,7 +26,6 @@ const TexMasterSelector = ({ onChange }) => {
           type="file"
           style={{ display: "none" }}
           onChange={handleChange}
-          multiple="multiple"
           accept=".tex"
         />
       </Button>

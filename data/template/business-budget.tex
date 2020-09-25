@@ -1,0 +1,56 @@
+\pagestyle{empty}
+\AddToShipoutPicture{\BackgroundPic}	
+
+  \begin{minipage}{\linewidth}
+      \begin{minipage}{0.475\linewidth}
+\begin{caja}[frametitle=Datos del cliente,userdefinedwidth=8cm,align=center]
+	\begin{itemize}
+		\item \textbf{Nombre: }!NAME!
+		\item \textbf{Dirección: }!ADDRESS!
+		\item \textbf{C.P/Ciudad: }!CP!, !CITY!
+		\item \textbf{CIF/NIF: }!NIF!
+		\item \textbf{Móvil: }!PHONENUMBER!
+		\item \textbf{Correo: }!EMAIL!
+	\end{itemize}
+\end{caja}
+      \end{minipage}
+      \begin{minipage}{0.475\linewidth}
+\begin{caja}[frametitle=Datos del presupuesto,userdefinedwidth=8cm,align=center]
+	\begin{itemize}
+		\item \textbf{Nº Cliente: }!CLIENTNUMBER!
+		\item \textbf{Nº Presupuesto: }!BUDGETNUMBER!
+		\item \textbf{Fecha: }\today
+	\end{itemize}
+\end{caja}
+      \end{minipage}
+  \end{minipage}
+
+\vspace{0.5cm}
+
+\begin{spacing}{1.2}
+\begin{longtable}{M{2cm}M{1.5cm}M{4.5cm}M{1.5cm}M{1.5cm}M{1.5cm}M{2cm}M{2cm}M{2cm}}
+\caption{Presupuesto de la instalación detallado} \label{tab01-08}\\
+\hline
+\hline
+\rule[-8pt]{0pt}{0pt}{\bfseries{Referencia}}& {\bfseries{Marca}} & {\bfseries{Descripción}} & {\bfseries{Cantidad}} & {\bfseries{P.prov.}} & {\bfseries{BI(\%)}} & {\bfseries{Precio Unitario}} & {\bfseries{Precio total}} & {\bfseries{Ganancias}}\\
+\hline
+\hline
+& & & & & & & & \\
+
+\hline
+\hline
+\vspace{0.5cm}
+  &        &                                          &    &    &          & Subtotal & !SUBTOTAL! \\
+\cline{7-9}
+\vspace{0.5cm}
+  &        &                                          &    &    &          & GG (13\%) & !GENERALEXPENSES! \\
+\cline{7-9} 
+\vspace{0.5cm}
+  &        &                                          &    &    &          & IVA (21\%) & !IVA! \\
+\cline{7-9} 
+\vspace{0.5cm}
+  &        &                                          &    &    &          & \textbf{Total} & \textbf{!TOTAL1!} & \textbf{!TOTAL2!}\\
+\cline{7-9}
+%\hline
+\end{longtable}
+\end{spacing}			 

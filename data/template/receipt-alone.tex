@@ -1,0 +1,229 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NORMALMENTE NO ES NECESARIO HACER 
+%%% CAMBIOS EN ESTA PARTE DEL DOCUMENTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%:Clase del documento
+\documentclass[fontsize=11pt, Myfinal=true, oneside, numbers=noenddot]{report}
+%Minion=true, English=true, Myfinal=true
+
+%:Paquete de estilos propuesto
+\usepackage[Myfinal=true]{libroETSI}
+
+%:Paquete específico para cargar tikz (y sus librerías) y pgfplots
+\usepackage{dtsc-creafig}
+
+%:Paquete para notaciones específicas
+\usepackage{notacion}
+
+%:Paquete para incorporar aspectos concretos de la edición
+\usepackage{edicionPFC}
+
+% Paquete para incluir epígrafes en los capítulos
+\usepackage{epigraph}
+
+
+
+
+%:Para modificar fácilmente la fuente del texto.
+\makeatletter
+\ifdtsc@Minion % Queremos utilizar la fuente Minion y lo hemos declarado al principio
+	\ifluatex
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.01,
+		]{Minion Pro}
+   		% En este caso conviene modificar ligeramente el tamaño de las fuentes matemáticas
+		\DeclareMathSizes{10}{10.5}{7.35}{5.25}
+		\DeclareMathSizes{10.95}{11.55}{8.08}{5.77}
+		\DeclareMathSizes{12}{12.6}{8.82}{6.3}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Adobe Garamond Pro}
+%		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+%		]{Palatino LT Std}
+	\fi
+\else
+	\ifluatex
+		% Para utilizar la fuente Times New Roman, o alguna otra que se tenga instalada
+		\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+		Scale=1.0,
+		]{Times New Roman}
+	\else
+		\usepackage{tgtermes} 	%clone of Times
+		%\usepackage[default]{droidserif}
+		%\usepackage{anttor} 	
+	\fi
+\fi
+\makeatother
+
+% Formato A4
+\geometry
+{paperheight=297mm,%
+paperwidth=210mm,%
+top=25mm,%
+headsep=8.5mm,%
+includefoot, 
+textheight=240mm, 
+textwidth=150mm, 
+bindingoffset=0mm, 
+}
+%asymmetric----elimina el efecto twoside
+%twoside---formato de márgenes a doble cara, estilo libro
+
+\usepackage[a4,center]{crop}%para poner las cruces de esquina de página, poner la opción cross
+
+%:Esquema de numeración por defecto
+\setenumerate[1]{label=\normalfont\bfseries{\arabic*.}, leftmargin=*, labelindent=\parindent}
+\setenumerate[2]{label=\normalfont\bfseries{\alph*}), leftmargin=*}
+\setenumerate[3]{label=\normalfont\bfseries{\roman*.}, leftmargin=*}
+\setlist{itemsep=.1em}
+\setlength{\parindent}{1.0 em}
+
+\setcounter{tocdepth}{4}						% El nivel hasta el que se muestra el índice 
+
+%\usepackage[framemethod=tikz]{mdframed}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+%Campo de firma
+\newcommand{\firmado}[2]{%
+\vspace{0.5cm}
+  \parbox{\textwidth}{
+    \centering #2 \today\\
+   % \vspace{4cm}
+   
+   \begin{center} 
+\includegraphics[scale=1,angle=90]{figuras/03-SELLO TESA}
+\end{center}    
+    \parbox{9cm}{
+      \centering
+      \rule{6cm}{1pt}\\
+       #1 
+    }
+    \hfill
+  }
+}
+
+%Para incluir pdf
+\usepackage{pdfpages}
+
+%Para poner la marca de agua
+\usepackage{eso-pic}
+\usepackage{transparent}
+
+\newcommand\BackgroundPic{
+\put(0,-50){
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+{\transparent{0.35}\includegraphics[width=13.5cm,height=10cm]{figuras/01-LOGO}}%
+\vfill
+}}}
+
+\begin{document}
+\AddToShipoutPicture{\BackgroundPic}
+
+%Fin Portada
+\pagestyle{esitscCD}
+
+\chapter*{Presupuesto}
+\AddToShipoutPicture{\BackgroundPic}
+  \begin{minipage}{\linewidth}
+      %\centering
+      \begin{minipage}{0.475\linewidth}
+\begin{caja}[frametitle=Datos del cliente,userdefinedwidth=8cm]
+	\begin{itemize}
+		\item \textbf{Nombre: }!NAME!
+		\item \textbf{Dirección: }!ADDRESS!
+		\item \textbf{C.P/Ciudad: }!CP!, !CITY!
+		\item \textbf{CIF/NIF: }!NIF!
+		\item \textbf{Móvil: }!PHONENUMBER!
+		\item \textbf{Correo: }!EMAIL!
+	\end{itemize}
+\end{caja}
+      \end{minipage}
+      \hspace{0.05\linewidth}
+      \begin{minipage}{0.475\linewidth}
+\begin{caja}[frametitle=Datos del presupuesto,userdefinedwidth=7cm]
+	\begin{itemize}
+		\item \textbf{Nº Cliente: }!CLIENTNUMBER!
+		\item \textbf{Nº Presupuesto: }!BUDGETNUMBER!
+		\item \textbf{Fecha: }\today
+%		\item \textbf{CIF/NIF: }76626884-S
+%		\item \textbf{Móvil: }646504420
+%		\item \textbf{Correo: }tecnico@tesaenergia.com
+	\end{itemize}
+\end{caja}
+      \end{minipage}
+  \end{minipage}
+
+\vspace{0.5cm}
+
+
+\begin{longtable}{M{2cm}M{1.5cm}M{4.5cm}M{1.5cm}M{1.75cm}M{2cm}}
+\caption{Presupuesto de la instalación} \label{tab01-08}\\
+\hline
+\hline
+\rule[-8pt]{0pt}{22pt}{\bfseries{Referencia}}& {\bfseries{Marca}} & {\bfseries{Descripción}} & {\bfseries{Cantidad}} & {\bfseries{Precio Unitario}} & {\bfseries{Precio total}} \\
+\hline
+\hline
+& & & & & \\
+\hline
+\hline
+\vspace{0.5cm}
+  &        &                                          &    & Subtotal & !SUBTOTAL! \\
+\cline{5-6}
+\vspace{0.5cm}
+  &        &                                          &    & GG 13\% & !GENERALEXPENSES! \\
+\cline{5-6}
+\vspace{0.5cm}
+  &        &                                          &    & IVA 21\% & !IVA! \\
+\cline{5-6}
+\vspace{0.5cm}
+  &        &                                          &    & \textbf{Total} & \textbf{!TOTAL!} \\
+\rule{15.7cm}{2pt}
+%\hline
+%\hline
+\end{longtable}
+				 
+\section*{Importante:}
+
+\begin{itemize}
+\item Este presupuesto tiene una validez de \textbf{10 días laborables.}
+\item El plazo de ejecución de la obra será de \textbf{10 días laborables desde la recepción de los equipos}, siempre y cuando se trate de una instalación residencial o menor de 5 kW. En caso contrario dependerá del tamaño de la obra a realizar.
+\item Si durante la prestación del servicio esta propuesta se viera ampliada por parte del cliente, este presupuesto quedaría invalidado, y se realizaría uno nuevo en función del trabajo adicional.
+\item En esta propuesta de presupuesto no se incluyen los posibles gastos que se puedan originar debido al cumplimiento de la nueva especificación particular de ENDESA que afecta a las instalaciones de enlace conectadas a redes de distribución.
+\item \textbf{Para confirmar la aceptación de esta propuesta, deberá devolver firmadas, de forma manuscrita o digital, cada una de las hojas que la componen o el documento en general respectivamente. Además, se adjuntará el recibo del primer pago, como se describe en el apartado \textit{Forma de pago}.}
+\end{itemize}
+
+\section*{Garantías:}
+Como se ha comentado anteriormente, los plazos de garantía de los equipos son los siguientes:
+\begin{itemize}
+\item Módulos solares: \textbf{91.2\% de su potencia nominal los 12 primeros años}, 80.6\% hasta los 30 años.
+\item Inversor: \textbf{2 años, ampliables hasta 5 años totalmente gratis, según la marca de éste}. Se puede ampliar hasta 10 años realizando un pago extra variable según la marca del mismo.
+\item Medidor de energía: 2 años.
+\item Mantenimiento: En caso de algún fallo producido en la instalación, la empresa se hace cargo desde la puesta en marcha de la misma hasta los 2 años siguientes. En caso de que el/los componente/s afectados se encuentren en garantía, se procederá a la tramitación de la misma, por lo que solo se cobrará la mano de obra necesaria para sustituir dichos componentes. Por el contrarío, si el plazo de garantía se ha cumplido, el cliente recibirá un presupuesto con los gastos de la avería.           
+\end{itemize}
+\textbf{LA GARANTÍA NO CUBRE DAÑO ALGUNO EN CASO DE MAL USO O ALGUNA MODIFICACIÓN REALIZADA, POSTERIORMENTE A LA PUESTA EN MARCHA, POR ALGUIEN DISTINTO AL TÉCNICO DE LA EMPRESA QUE REALIZÓ LA INSTALACIÓN. }
+
+\section*{Forma de pago:}
+				 
+\begin{itemize}
+\item El importe del presupuesto se pagará de la siguiente manera:
+\begin{itemize}
+\item 50\% en el momento de la aceptación del presupuesto.
+\item 50\% restante, durante los 7 días siguientes de finalizar la instalación, o en el mismo día que se entrega toda la documentación de la legalización de la instalación. 
+\end{itemize}
+\item El pago se realizará por transferencia bancaria: \textbf{ES96 0182 7086 7302 0157 0813}
+\end{itemize}
+
+\firmado{Carlos Salcedo Ruíz}{Churriana de la Vega (Granada),}
+
+\vspace{1cm}
+\small
+\textit{TESLA ENERGY SALCEDO S.L} es el Responsable del tratamiento de los datos personales proporcionados bajo su consentimiento y le informa que estos datos serán tratados de conformidad con lo dispuesto en el Reglamento (UE) 2016/679, de 27 de abril de 2016 (RGPD), siendo su finalidad la de mantener una mutua relación comercial con usted y conservarlos mientras exista un interés mutuo para mantener el fin del tratamiento y, cuando ya no sea necesario para tal fin, se suprimirán con medidas de seguridad adecuadas para garantizar la seudonimización de los datos o la destrucción total de los mismos. No se comunicarán los datos a terceros, salvo obligación legal. Asimismo, se informa que puede ejercer los derechos de acceso, rectificación, portabilidad y supresión de sus datos y los de limitación y oposición a su tratamiento, dirigiéndose a \textit{TESLA ENERGY SALCEDO S.L}, bien por vía postal, en C/ Derechos Humanos, Nº8, 18194, Churriana de la Vega, Granada, o bien por email: \underline{contable@tesaenergia.com}
+
+%\includepdf[pages=-, landscape=true, angle=90]{PLANOS/04-REPLANTEO}
+
+
+\end{document}
