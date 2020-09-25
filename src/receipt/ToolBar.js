@@ -6,7 +6,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import PublishIcon from "@material-ui/icons/Publish";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,28 +21,70 @@ const ToolBar = (props) => {
     const path = e.target.files[0].path;
     props.onXlsxChange(path);
   };
-  const classes = useStyles();
 
+  const updateJsonFile = (e) => {
+    const path = e.target.files[0].path;
+    props.updateJsonFile(path);
+  };
+
+  const saveJsonFile = (e) => {
+    const path = e.target.files[0].path;
+    props.saveJsonFile(path);
+  };
+
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       <Paper elevation={5}>
         <Grid container spacing={3}>
-          <Grid item xs={6} align="center">
+          <Grid item xs={3} align="center">
             <TextField label="Search by reference" onChange={props.onSearch} />
           </Grid>
-          <Grid item xs={6} align="center">
+          <Grid item xs={3} align="center">
             <Button
               variant="contained"
               component="label"
               color="primary"
-              startIcon={<InsertDriveFileIcon />}
+              startIcon={<AccountBalanceIcon />}
             >
-              XSLX file
+              Catálogo
               <input
                 type="file"
                 style={{ display: "none" }}
                 onChange={updateFile}
                 accept=".xlsx"
+              />
+            </Button>
+          </Grid>
+          <Grid item xs={3} align="center">
+            <Button
+              variant="contained"
+              component="label"
+              color="primary"
+              startIcon={<PublishIcon />}
+            >
+              Cargar
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={updateJsonFile}
+                accept=".json"
+              />
+            </Button>
+          </Grid>
+          <Grid item xs={3} align="center">
+            <Button
+              variant="contained"
+              component="label"
+              color="primary"
+              startIcon={<GetAppIcon />}
+            >
+              Guardar
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={saveJsonFile}
+                accept=".json"
               />
             </Button>
           </Grid>
