@@ -4,12 +4,7 @@ import { TextField, Checkbox } from "@material-ui/core";
 import Table from "../common/SpreadTable";
 
 import {
-  Receipt,
-  computeSubtotal,
-  computeVAT,
-  computeGeneralExpenses,
-  computeTotal,
-  computeBenefits,
+  Receipt, computeDetailedTotal, DetailedTotal
 } from "../utils/Receipt";
 
 const addEuroSymbol = (x: number) => `${x.toFixed(2)} €`;
@@ -27,11 +22,7 @@ const Total = ({
   enableTotalChange,
   enableGeneralExpenses,
 }: TotalProps) => {
-  const subtotal = computeSubtotal(receipt.items);
-  const vat = computeVAT(receipt.items);
-  const gg = computeGeneralExpenses(receipt);
-  const total = computeTotal(receipt);
-  const benefits = computeBenefits(receipt.items);
+  const dTotal: DetailedTotal = computeDetailedTotal(receipt);
   const rows = [
     [
       "Subtotal",
@@ -56,7 +47,7 @@ const Total = ({
       </div>,
     ],
     [
-      ...[subtotal, vat, gg, total, benefits].map((x) => addEuroSymbol(x)),
+      ...[dTotal.subtotal, dTotal.vat, dTotal.generalExpenses, dTotal.total, dTotal.benefits].map((x) => addEuroSymbol(x)),
       <TextField
         onChange={(e) =>
           onExpectedTotalChange(parseFloat(e.currentTarget.value))
