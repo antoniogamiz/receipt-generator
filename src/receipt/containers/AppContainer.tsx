@@ -4,7 +4,13 @@ import LatexGenerator from "../LatexGenerator";
 import XLSX from "../../utils/xlsx";
 import { generatePDF } from "../../utils/latex";
 import ReceiptContainer from "./ReceiptContainer";
-import { Receipt, addItem, updateItem, deleteItem, DEFAULT_BI } from "../../utils/Receipt";
+import {
+  Receipt,
+  addItem,
+  updateItem,
+  deleteItem,
+  DEFAULT_BI,
+} from "../../utils/Receipt";
 import ClientDataContainer, { ClientData, Entry } from "./ClientDataContainer";
 
 export interface ReceiptCreatorState {
@@ -30,31 +36,39 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
       clientData: {
         name: { displayName: "Nombre", value: "" },
         address: {
-          displayName: "Dirección", value: ""
+          displayName: "Dirección",
+          value: "",
         },
         city: {
-          displayName: "Ciudad", value: ""
+          displayName: "Ciudad",
+          value: "",
         },
         cp: { displayName: "CP", value: 0 },
         nif: { displayName: "NIF", value: "" },
         installationAddress: {
-          displayName: "Dir. Instalación", value: ""
+          displayName: "Dir. Instalación",
+          value: "",
         },
         installationType: {
-          displayName: "Tipo Instalación", value: ""
+          displayName: "Tipo Instalación",
+          value: "",
         },
         mobile: {
-          displayName: "Móvil", value: 0
+          displayName: "Móvil",
+          value: 0,
         },
         email: { displayName: "Email", value: "" },
         azimut: {
-          displayName: "Azimut", value: ""
+          displayName: "Azimut",
+          value: "",
         },
         clientNumber: {
-          displayName: "Nº Cliente", value: ""
+          displayName: "Nº Cliente",
+          value: "",
         },
         budgetNumber: {
-          displayName: "Nº Presupuesto", value: ""
+          displayName: "Nº Presupuesto",
+          value: "",
         },
       },
       pdfFiles: [],
@@ -64,7 +78,14 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
 
   onXlsxChange = (path: string) => {
     const newXLSX = new XLSX(path);
-    newXLSX.load().then(() => this.setState({ xlsx: newXLSX }));
+    console.log("hey");
+    newXLSX
+      .load()
+      .then(() => {
+        console.log("dd");
+        this.setState({ xlsx: newXLSX });
+      })
+      .catch((e) => alert(e));
   };
 
   onAddItem = (reference: string) => {
@@ -115,21 +136,21 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
     });
   };
 
-  onClientDataChange = (
-    field: keyof ClientData,
-    value: string | number
-  ) => {
-    const entry: Entry<string | number> = { ...this.state.clientData[field], value: value };
+  onClientDataChange = (field: keyof ClientData, value: string | number) => {
+    const entry: Entry<string | number> = {
+      ...this.state.clientData[field],
+      value: value,
+    };
     this.setState({
       clientData: { ...this.state.clientData, [field]: entry },
     });
   };
 
-  onPdfFilesChange = (files: string[]) => this.setState({ pdfFiles: files })
+  onPdfFilesChange = (files: string[]) => this.setState({ pdfFiles: files });
 
-  onTexFileChange = (file: string) => this.setState({ texFile: file })
+  onTexFileChange = (file: string) => this.setState({ texFile: file });
 
-  compile = () => generatePDF(this.state.texFile, this.state)
+  compile = () => generatePDF(this.state.texFile, this.state);
 
   render() {
     return (

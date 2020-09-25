@@ -78,7 +78,7 @@ export const computeVAT = (items: Item[]): number =>
 
 export const computeGeneralExpenses = (receipt: Receipt): number =>
   receipt.generalExpensesEnabled
-    ? computeVAT(receipt.items) * (receipt.generalExpenses / 100)
+    ? computeSubtotal(receipt.items) * (receipt.generalExpenses / 100)
     : 0;
 
 export const computeTotal = (receipt: Receipt): number =>
@@ -86,14 +86,16 @@ export const computeTotal = (receipt: Receipt): number =>
   computeVAT(receipt.items) +
   computeGeneralExpenses(receipt);
 
-export const computeBenefitsOfItem = (item: Item): number => item.amount * item.provider_price * item.bi / 100
+export const computeBenefitsOfItem = (item: Item): number =>
+  (item.amount * item.provider_price * item.bi) / 100;
 
 export const computeBenefits = (items: Item[]): number =>
-  items.reduce((accumulator, item) => computeBenefitsOfItem(item) + accumulator, 0);
+  items.reduce(
+    (accumulator, item) => computeBenefitsOfItem(item) + accumulator,
+    0
+  );
 
-export const applyExpectedTotal = (
-  receipt: Receipt
-): Item[] => {
+export const applyExpectedTotal = (receipt: Receipt): Item[] => {
   if (!receipt.expectedTotalEnabled) return receipt.items;
 
   const total: number = computeSubtotal(receipt.items);
@@ -116,7 +118,7 @@ export type DetailedTotal = {
   benefits: number;
   benefitsFromGeneralExpenses: number;
   total: number;
-}
+};
 
 export const computeDetailedTotal = (receipt: Receipt): DetailedTotal => {
   const newReceipt = { ...receipt };
@@ -126,7 +128,8 @@ export const computeDetailedTotal = (receipt: Receipt): DetailedTotal => {
     vat: computeVAT(newReceipt.items),
     generalExpenses: computeGeneralExpenses(newReceipt),
     benefits: computeBenefits(newReceipt.items),
-    benefitsFromGeneralExpenses: computeBenefits(newReceipt.items) * (newReceipt.generalExpenses) / 100,
-    total: computeTotal(newReceipt)
-  }
-}
+    benefitsFromGeneralExpenses:
+      (computeBenefits(newReceipt.items) * newReceipt.generalExpenses) / 100,
+    total: computeTotal(newReceipt),
+  };
+};

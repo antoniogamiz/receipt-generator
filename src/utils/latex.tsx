@@ -1,4 +1,4 @@
-import { ReceiptCreatorState } from "../receipt/containers/AppContainer"
+import { ReceiptCreatorState } from "../receipt/containers/AppContainer";
 import { computeBenefitsOfItem, computeDetailedTotal } from "./Receipt";
 
 const path = window.require("path");
@@ -7,15 +7,33 @@ const util = window.require("util");
 const exec = util.promisify(window.require("child_process").exec);
 const { ipcRenderer } = window.require("electron");
 
+const setCharAt = (str: string, index: number, chr: string): string => {
+  if (index > str.length - 1) return str;
+  return str.substring(0, index) + chr + str.substring(index + 1);
+};
+
+const format = (x: number): string => {
+  let englishFormat = x
+    .toFixed(2)
+    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  const indexOfDecimalPart = englishFormat.indexOf(".");
+  let number = englishFormat.replace(/,/g, ".");
+  if (indexOfDecimalPart !== -1) {
+    number = setCharAt(number, indexOfDecimalPart, ",");
+  }
+  return `${number} €`;
+};
 
 const replacePDFs = (text: string, data: ReceiptCreatorState) => {
-  const inputs = data.pdfFiles.map(
-    (file) =>
-      `\\includepdf[pages=-, landscape=true, angle=90]{${file.replaceAll(
-        "\\",
-        "/"
-      )}}`
-  ).join("");
+  const inputs = data.pdfFiles
+    .map(
+      (file) =>
+        `\\includepdf[pages=-, landscape=true, angle=90]{${file.replaceAll(
+          "\\",
+          "/"
+        )}}`
+    )
+    .join("");
   return text.replace("!INPUTFILES!", inputs);
 };
 
@@ -40,15 +58,16 @@ const replaceReceiptData = (text: string, data: ReceiptCreatorState) => {
   const receiptTable = data.receipt.items
     .map(
       (item) =>
-        `${item.reference} & ${item.brand} & ${item.description} & ${item.amount
-        } & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € \\\\\\hline`
+        `${item.reference} & ${item.brand} & ${item.description} & ${
+          item.amount
+        } & ${format(item.pvp)} & ${format(item.total)} \\\\\\hline`
     )
     .join("\n");
   return text
-    .replace("!SUBTOTAL!", `${detailedTotal.subtotal.toFixed(2)} €`)
-    .replace("!IVA!", `${detailedTotal.vat.toFixed(2)} €`)
-    .replace("!GENERALEXPENSES!", `${detailedTotal.generalExpenses.toFixed(2)} €`)
-    .replace("!TOTAL!", `${detailedTotal.total.toFixed(2)} €`)
+    .replace("!SUBTOTAL!", format(detailedTotal.subtotal))
+    .replace("!IVA!", format(detailedTotal.vat))
+    .replace("!GENERALEXPENSES!", format(detailedTotal.generalExpenses))
+    .replace("!TOTAL!", format(detailedTotal.total))
     .replace("& & & & & \\\\", receiptTable);
 };
 
@@ -57,27 +76,31 @@ const replaceBusinessData = (text: string, data: ReceiptCreatorState) => {
   const receiptTable = data.receipt.items
     .map(
       (item) =>
-        `${item.reference} & ${item.brand} & ${item.description} & ${item.amount
-        } & ${item.provider_price.toFixed(2)} € & ${item.bi.toFixed(
+        `${item.reference} & ${item.brand} & ${item.description} & ${
+          item.amount
+        } & ${format(item.provider_price)} & ${item.bi.toFixed(
           2
-        )} \\% & ${item.pvp.toFixed(2)} € & ${item.total.toFixed(2)} € & ${(
+        )} \\% & ${format(item.pvp)} & ${format(item.total)} & ${format(
           computeBenefitsOfItem(item)
-        ).toFixed(2)} € \\\\`
+        )} \\\\`
     )
     .join("\n");
   return text
-    .replace("!SUBTOTAL!", `${detailedTotal.subtotal.toFixed(2)} € & ${detailedTotal.benefits.toFixed(2)} €`)
-    .replace("!IVA!", `${detailedTotal.vat.toFixed(2)} €`)
+    .replace(
+      "!SUBTOTAL!",
+      `${format(detailedTotal.subtotal)} & ${format(detailedTotal.benefits)}`
+    )
+    .replace("!IVA!", format(detailedTotal.vat))
     .replace(
       "!GENERALEXPENSES!",
-      `${detailedTotal.generalExpenses.toFixed(2)} € & ${detailedTotal.benefitsFromGeneralExpenses.toFixed(2)} €`
+      `${format(detailedTotal.generalExpenses)} & ${format(
+        detailedTotal.benefitsFromGeneralExpenses
+      )}`
     )
-    .replace("!TOTAL1!", `${detailedTotal.total.toFixed(2)} €`)
+    .replace("!TOTAL1!", format(detailedTotal.total))
     .replace(
       "!TOTAL2!",
-      `${(
-        detailedTotal.benefits + detailedTotal.benefitsFromGeneralExpenses
-      ).toFixed(2)} €`
+      format(detailedTotal.benefits + detailedTotal.benefitsFromGeneralExpenses)
     )
     .replace("& & & & & & & & \\\\", receiptTable);
 };
@@ -86,7 +109,10 @@ const openPDF = (pdfPath: string) => {
   ipcRenderer.send("show-pdf", pdfPath);
 };
 
-export const generateBusinessReport = async (pathFile: string, data: ReceiptCreatorState) => {
+export const generateBusinessReport = async (
+  pathFile: string,
+  data: ReceiptCreatorState
+) => {
   const directory = path.dirname(pathFile);
 
   const reportPath = path.format({
@@ -119,7 +145,10 @@ export const generateBusinessReport = async (pathFile: string, data: ReceiptCrea
   );
 };
 
-export const generateReceiptAlone = async (pathFile: string, data: ReceiptCreatorState) => {
+export const generateReceiptAlone = async (
+  pathFile: string,
+  data: ReceiptCreatorState
+) => {
   const directory = path.dirname(pathFile);
 
   const reportPath = path.format({
@@ -152,7 +181,10 @@ export const generateReceiptAlone = async (pathFile: string, data: ReceiptCreato
   );
 };
 
-export const generateClientReport = async (pathFile: string, data: ReceiptCreatorState) => {
+export const generateClientReport = async (
+  pathFile: string,
+  data: ReceiptCreatorState
+) => {
   const directory = path.dirname(pathFile);
   const clientMaster = path.basename(pathFile);
   const templatePath = path.format({
@@ -197,7 +229,10 @@ export const generateClientReport = async (pathFile: string, data: ReceiptCreato
   );
 };
 
-export const generatePDF = async (pathFile: string, data: ReceiptCreatorState) => {
+export const generatePDF = async (
+  pathFile: string,
+  data: ReceiptCreatorState
+) => {
   try {
     await generateClientReport(pathFile, data);
     await generateBusinessReport(pathFile, data);
