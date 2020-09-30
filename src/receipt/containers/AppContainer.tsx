@@ -179,19 +179,20 @@ class AppContainer extends React.Component<{}, ReceiptCreatorState> {
       const newItem = this.state.xlsx.searchByReference(
         obj.items[i].reference
       )[1];
+      console.log(newItem);
       items = addItem(items, newItem);
+      console.log(items);
       items = updateItem(items, obj.items[i].reference, {
         bi: obj.items[i].bi,
         amount: obj.items[i].amount,
       });
+      console.log(items);
     }
-
     this.setState({
       clientData: {
         ...obj.clientData,
       },
       receipt: {
-        ...this.state.receipt,
         items: items,
         expectedTotal: obj.expectedTotal,
         expectedTotalEnabled: obj.expectedTotalEnabled,

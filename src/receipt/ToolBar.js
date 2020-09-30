@@ -18,11 +18,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ToolBar = (props) => {
   const updateFile = (e) => {
+    if (!e.target.files) return;
     const path = e.target.files[0].path;
     props.onXlsxChange(path);
   };
 
   const loadJsonFile = (e) => {
+    if (!e.target.files) return;
     const path = e.target.files[0].path;
     props.loadJsonFile(path);
   };
